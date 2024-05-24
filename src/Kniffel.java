@@ -1,0 +1,58 @@
+
+import classes.*;
+
+
+public class Kniffel {
+
+
+    public static void main(String[] args) {
+        String choise;
+        boolean wrongChoise = false;
+        System.setProperty("file.encoding", "UTF-8");
+        
+        Console.clear();
+        Console.printGFX("logo");
+        Highscore.createHighscore();
+        Console.promptEnterKey();
+        Console.clear();
+        while(true){
+            // Show MainMenu
+            Console.clear();
+            Console.printGFX("logo");
+            System.out.printf("\t\t\t\t\t\tWillkommen bei Kniffel!\n\n");
+            System.out.printf("\t\t\t\t\t\tOptionen:\n");
+            System.out.printf("\t\t\t\t\t\tN - Neues Spiel starten\n");
+            System.out.printf("\t\t\t\t\t\tH - Highscore anzeigen\n");
+            System.out.printf("\t\t\t\t\t\tC - Credits anzeigen\n");
+            System.out.printf("\t\t\t\t\t\tB - Beenden\n\n");
+            // Get input               
+            if(wrongChoise){
+                System.out.printf("\t\t\t\t\t  Bitte eine gültige Auswahl treffen.\n");
+            }
+            System.out.printf("\t\t\t\t\t\tTriff Deine Auswahl: ");
+            choise = Console.getInput().toUpperCase();
+            switch(choise){
+                case "N":
+                    // TODO Start Game
+                    System.out.println("N");
+                    break;
+                case "H":
+                    // TODO Highscore
+                    System.out.println("H");
+                    break;
+                case "C":
+                    Credits.printCredits();
+                    break;
+                case "B":
+                    Console.clear();
+                    Console.printGFX("logo");
+                    Console.printGFX("exit");
+                    Console.promptEnterKey("exit");
+                    return;
+                default:
+                    wrongChoise = true;
+                    break;
+            }
+        }
+    }
+}
