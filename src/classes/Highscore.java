@@ -57,10 +57,8 @@ public class Highscore {
                 highscoreLines--;
                 }
                 out.flush();
-                System.out.println("Reihe angelegt");
             }
             out.close();
-            System.out.println("Highscoredatei angelegt");
           } catch (IOException e) {
             System.out.println("Highscore datei konnte nicht angelegt werden.");
           }
