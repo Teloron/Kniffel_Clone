@@ -425,3 +425,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+# Highscore ordner ingorieren
+save
