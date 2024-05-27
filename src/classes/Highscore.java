@@ -16,7 +16,7 @@ public class Highscore {
     private static String[] defaultNames = {"Joel", "Kratos", "Dominic","Henning","Joanne","Dimitios","Kai","Arthur","Brynhild","Sigrun"};
 
     // Method to create Highscore savefile and or folder if it does not exist
-    public static void createHighscore() {
+    public static void checkCreateHighscore() {
         // Check if savefile exists
         BufferedReader in;
         try {

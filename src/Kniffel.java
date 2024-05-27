@@ -12,7 +12,7 @@ public class Kniffel {
         
         Console.clear();
         Console.printGFX("logo");
-        Highscore.createHighscore();
+        Highscore.checkCreateHighscore();
         Console.promptEnterKey();
         Console.clear();
         while(true){
