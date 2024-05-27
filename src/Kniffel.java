@@ -34,11 +34,13 @@ public class Kniffel {
             switch(choise){
                 case "N":
                     // TODO Start Game
+                    // TODO Gameplay Loop
+                    // TODO Game End
+                    // TODO Update and Show Highscore
                     System.out.println("N");
                     break;
                 case "H":
-                    // TODO Highscore
-                    System.out.println("H");
+                    Highscore.showHighscore();
                     break;
                 case "C":
                     Credits.printCredits();

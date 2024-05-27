@@ -50,7 +50,7 @@ public class Highscore {
             out = new BufferedWriter(new FileWriter(saveDirectory + saveFile));
             highscoreLines = 10;
             for(int i = 0; i < 10; i++){
-                String row = String.format("%d %s", 10-i, defaultNames[i]);
+                String row = String.format("%2d - %s", 10-i, defaultNames[i]);
                 out.write(row);
                 if(highscoreLines > 1){
                 out.newLine();
@@ -69,7 +69,33 @@ public class Highscore {
         try {
             new File(saveDirectory + saveFile).createNewFile();
         } catch (IOException e1) {
-            System.out.println("Could not create Savefile");
+            System.out.println("Highscore konnte nicht angelegt werden.");
         }
     }
+
+    public static void showHighscore(){
+        Console.printGFX("logo");
+        Console.printGFX("podium_racer");
+        printHighscore();
+        System.out.println();
+        System.out.print("       ");
+        Console.promptEnterKey("EXIT");
+    }
+
+    public static void printHighscore(){
+        try{
+            BufferedReader in = new BufferedReader(new FileReader(saveDirectory + saveFile));
+            String line = in.readLine();
+            while(line != null){
+                System.out.printf("\t\t\t\t\t\t       %s%n",line);
+                line = in.readLine();
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Keine Highscores vorhanden");
+        } catch (IOException e) {
+            System.out.println("Fehler beim lesen des Highscores");
+        }
+    }
+
 }

@@ -89,7 +89,7 @@ public class Console {
         message = message.toUpperCase();
         int difference = 8 - message.length();
 
-        System.out.printf("\t\t\t\t\t    ");
+        System.out.printf("\t\t\t\t\t      ");
         for (int i = 0; i < difference; i++) {
             System.out.printf(" ");
         }
