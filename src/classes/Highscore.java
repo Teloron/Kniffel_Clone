@@ -18,9 +18,7 @@ public class Highscore {
     // Method to create Highscore savefile and or folder if it does not exist
     public static void checkCreateHighscore() {
         // Check if savefile exists
-        BufferedReader in;
-        try {
-            in = new BufferedReader(new FileReader(saveDirectory + saveFile));
+        try (BufferedReader in = new BufferedReader(new FileReader(saveDirectory + saveFile))){
             String line = in.readLine();
             while (line != null) {
                 highscoreLines++;
@@ -31,7 +29,6 @@ public class Highscore {
                 createSavefile();
                 needNewScores = true;
             }
-            in.close();
         } catch (FileNotFoundException e) {
             // Create new safe folder and file if it does not exist
             createSavefile();
@@ -43,11 +40,9 @@ public class Highscore {
             writeNewHighscores();
         }
     }
-
+    // Methode zum anlegen eines neuen default Highscores
     public static void writeNewHighscores(){
-        BufferedWriter out;
-        try {
-            out = new BufferedWriter(new FileWriter(saveDirectory + saveFile));
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(saveDirectory + saveFile))){
             highscoreLines = 10;
             for(int i = 0; i < 10; i++){
                 String row = String.format("%2d - %s", 10-i, defaultNames[i]);
@@ -58,7 +53,6 @@ public class Highscore {
                 }
                 out.flush();
             }
-            out.close();
           } catch (IOException e) {
             System.out.println("Highscore datei konnte nicht angelegt werden.");
           }
@@ -83,14 +77,12 @@ public class Highscore {
     }
 
     public static void printHighscore(){
-        try{
-            BufferedReader in = new BufferedReader(new FileReader(saveDirectory + saveFile));
+        try (BufferedReader in = new BufferedReader(new FileReader(saveDirectory + saveFile))){
             String line = in.readLine();
             while(line != null){
                 System.out.printf("\t\t\t\t\t\t       %s%n",line);
                 line = in.readLine();
             }
-            in.close();
         } catch (FileNotFoundException e) {
             System.out.println("Keine Highscores vorhanden");
         } catch (IOException e) {

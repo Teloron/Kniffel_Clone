@@ -18,21 +18,18 @@ public class Console {
             return;
         }
         // open the file and print contents to console
-        BufferedReader in;
-        try {
-            in = new BufferedReader(new FileReader(filepath));
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + filepath);
-            return;
-        }
-        try {
+
+        try (BufferedReader in = new BufferedReader(new FileReader(filepath))) {
             String line = in.readLine();
             while (line != null) {
                 System.out.println(line);
                 line = in.readLine();
             }
-            in.close();
-        } catch (IOException e) {
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filepath);
+            return;
+        }
+        catch (IOException e) {
             System.out.println("Error reading file: " + filepath);
         }
     }
@@ -71,7 +68,7 @@ public class Console {
 
     // Method to pause the program and prompt the user to press enter to continue
     public static void promptEnterKey() {
-        System.out.printf("\t\t\t\t\t    PRESS ENTER TO CONTINUE");
+        System.out.printf("                                       PRESS ENTER TO CONTINUE");
         try {
             System.in.read(new byte[2]);
         } catch (IOException e) {
@@ -79,17 +76,12 @@ public class Console {
         }
 
     }
-
-    public static String getInput() {
-        return System.console().readLine();
-    }
-
     // Method to pause the program and prompt the user to press enter to do anything
     public static void promptEnterKey(String message) {
         message = message.toUpperCase();
         int difference = 8 - message.length();
 
-        System.out.printf("\t\t\t\t\t      ");
+        System.out.printf("                                         ");
         for (int i = 0; i < difference; i++) {
             System.out.printf(" ");
         }
@@ -100,4 +92,10 @@ public class Console {
             e.printStackTrace();
         }
     }
+
+    public static String getInput() {
+        return System.console().readLine();
+    }
+
+
 }

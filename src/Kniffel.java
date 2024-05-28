@@ -6,6 +6,7 @@ public class Kniffel {
 
 
     public static void main(String[] args) {
+        Dices dices = new Dices();
         String choise;
         boolean wrongChoise = false;
         System.setProperty("file.encoding", "UTF-8");
@@ -13,6 +14,8 @@ public class Kniffel {
         Console.clear();
         Console.printGFX("logo");
         Highscore.checkCreateHighscore();
+        dices.printDices();
+        dices.chooseDicesToReroll();
         Console.promptEnterKey();
         Console.clear();
         while(true){
@@ -49,10 +52,13 @@ public class Kniffel {
                     Console.clear();
                     Console.printGFX("logo");
                     Console.printGFX("exit");
+                    System.out.print("   ");
                     Console.promptEnterKey("exit");
                     return;
                 default:
-                    wrongChoise = true;
+                    System.out.println("\t\t\t\t\t\tUngültige Auswahl!");
+                    System.out.print("         ");
+                    Console.promptEnterKey();
                     break;
             }
         }

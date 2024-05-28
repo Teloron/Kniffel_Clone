@@ -17,19 +17,23 @@ public class Credits extends Console {
         printCreditHeader();
         System.out.println("\t\t\t\t\t\t   Projektidee:");
         Console.printGFX("henning");
+        System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tUse Case Designer:");
         Console.printGFX("kai");
+        System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tUmsetzung in C:");
         Console.printGFX("dominic");
         Console.printGFX("henning");
+        System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tPortierung in Java:");
         Console.printGFX("dominic");
+        System.out.print("      ");
         Console.promptEnterKey();
         Console.clear();
     }
