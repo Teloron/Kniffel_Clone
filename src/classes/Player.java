@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Player {
     
-    private int playerNumber = 0;
+    private int playerNumber = 1;
     private String name = "default";
     private int score = 0;
     private int einsen = 0;
@@ -28,13 +28,31 @@ public class Player {
     private int gesamtUnten = 0;
     private int endsumme = 0;
     private boolean finished = false;
+    boolean isActive = true;
 
-    private List<Player> players = new ArrayList<Player>();
+    public static List<Player> players = new ArrayList<Player>();
     // Method to add new players
-    public void addPlayer(int playerNumber, String name) {
+    public Player(int playerNumber, String name) {
         this.playerNumber = playerNumber;
         this.name = name;
         players.add(this);
+    }
+    public Player(int playerNumber, String name, boolean isActive) {
+        this.playerNumber = playerNumber;
+        this.name = name;
+        this.isActive = isActive;
+        players.add(this);
+    }
+    public static void returnPlayerNames(){
+        for( Player player : players){
+            System.out.println(player.name);
+        }
+    }
+    public static String choosePlayerName(int playerNumber){
+        System.out.printf("                                   Bitte den Namen von Spieler %d eingeben: ", playerNumber);
+        
+        String playerName = Console.getInput();
+        return playerName;
     }
     // Method to show players score
     public void showPlayerScore(){
@@ -61,7 +79,6 @@ public class Player {
     }
     public int getCalculateSummeOben(){
         return (einsen + zweien + dreien + vieren + fuenfen + sechsen);
-    
     }
     public void calculateSummeOben(){
         summeOben = einsen + zweien + dreien + vieren + fuenfen + sechsen;

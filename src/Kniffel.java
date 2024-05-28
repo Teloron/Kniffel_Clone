@@ -6,7 +6,6 @@ public class Kniffel {
 
 
     public static void main(String[] args) {
-        Dices dices = new Dices();
         String choise;
         boolean wrongChoise = false;
         System.setProperty("file.encoding", "UTF-8");
@@ -14,8 +13,6 @@ public class Kniffel {
         Console.clear();
         Console.printGFX("logo");
         Highscore.checkCreateHighscore();
-        dices.printDices();
-        dices.chooseDicesToReroll();
         Console.promptEnterKey();
         Console.clear();
         while(true){
@@ -37,10 +34,14 @@ public class Kniffel {
             switch(choise){
                 case "N":
                     // TODO Start Game
+                    Game game = new Game();
+                    game.startGameWithPlayers();
                     // TODO Gameplay Loop
+                    game.gameLoop();
+                    //Console.getInput();
                     // TODO Game End
                     // TODO Update and Show Highscore
-                    System.out.println("N");
+                    
                     break;
                 case "H":
                     Highscore.showHighscore();

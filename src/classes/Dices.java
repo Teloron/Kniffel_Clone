@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Dices {
     private int[] dices = new int[5];
-    private boolean[] dicesToReroll = new boolean[5];
+    private boolean[] dicesToKeep = {false, false, false, false, false};
     // private int dice1 = 0;
     // private int dice2 = 0;
     // private int dice3 = 0;
@@ -34,16 +34,18 @@ public class Dices {
         dices[diceIndex] = rand.nextInt(6)+1;
     }
     // Method to reroll the chosen the dices
-    public void rerollDices(boolean[] dicesToReroll) {
-        for(int i = 0; i<dicesToReroll.length; i++) {
-            if(dicesToReroll[i]) {
+    public void rerollDices() {
+        chooseDicesToKeep();
+        for(int i = 0; i<dicesToKeep.length; i++) {
+            if(!dicesToKeep[i]) {
                 rollOneDice(i);
+                dicesToKeep[i] = false;
             }
         }
     }
     // Method to choose which dices to reroll
-    public void chooseDicesToReroll() {
-        System.out.println("                                       Welche Würfel möchtest du neu werfen?");
+    public void chooseDicesToKeep() {
+        System.out.println("                                       Welche Würfel möchtest du behalten?");
         System.out.print("                                       Gewählte Würfel: ");
         
         String input = Console.getInput();
@@ -56,10 +58,10 @@ public class Dices {
                 diceIndex = Integer.parseInt(number) - 1;
             }catch(NumberFormatException e){}
             try {
-                dicesToReroll[diceIndex] = true;
+                dicesToKeep[diceIndex] = true;
             }catch(ArrayIndexOutOfBoundsException e){
                 System.out.println("                    Ungültige Eingabe. Bitte gib je Würfel nur eine Zahl zwischen 1 und 5 ein.");
-                chooseDicesToReroll();
+                chooseDicesToKeep();
             }
         }
     }
