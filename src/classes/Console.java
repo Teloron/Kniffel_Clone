@@ -6,24 +6,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 public class Console {
-    private static String[][] UMLAUT_REPLACEMENTS = { { "Ä", "Ae" }, { "Ü", "Ue" }, { "Ö", "Oe" }, { "ä", "ae" },
-            { "ü", "ue" }, { "ö", "oe" }, { "ß", "ss" } };
 
-    public static String replaceUmlaute(String orig) {
-        String result = orig;
-
-        for (int i = 0; i < UMLAUT_REPLACEMENTS.length; i++) {
-            result = result.replaceAll(UMLAUT_REPLACEMENTS[i][0], UMLAUT_REPLACEMENTS[i][1]);
-        }
-
-        return result;
-    }
 
     // Method to print the gfx files in Console
     public static void printGFX(FileEnums filename) {
+
         String space = "                                                ";
         if (filename.getFilepath() == null) {
             System.out.println("Could not determine filepath");
@@ -86,16 +75,12 @@ public class Console {
     }
 
     public static String getInput() {
-        Scanner scanner = new Scanner(System.in, Charset.defaultCharset());
-        String input = scanner.nextLine();
-        // return input;
-
-        //String input = System.console().readLine("", StandardCharsets.UTF_8);
-        // ByteBuffer buff = StandardCharsets.UTF_8.encode(input);
-        String convertedInput = replaceUmlaute(input);
-        return convertedInput; // utf8
 
 
+
+        Charset nativeCharset = Charset.forName(System.getProperty("native.encoding", Charset.defaultCharset().name()));
+        String input = System.console().readLine("", nativeCharset);
+        return input;
     }
 
 }

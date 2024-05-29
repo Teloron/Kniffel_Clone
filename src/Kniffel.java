@@ -11,6 +11,8 @@ public class Kniffel {
         String choise;
         boolean wrongChoise = false;
         System.setProperty("file.encoding", "UTF-8");
+        System.setProperty("console.encoding", "UTF-8");
+        System.setProperty("input.encoding", "UTF-8");
         
         Console.clear();
         Console.printGFX(FileEnums.LOGO);

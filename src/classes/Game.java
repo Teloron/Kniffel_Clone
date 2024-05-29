@@ -21,7 +21,7 @@ public class Game {
 
             if (humanPlayers < 1 || humanPlayers > 4) {
                 System.out.println(
-                        "                                   Ungültige Eingabe. Bitte eine Zahl zwischen 1 und 4 eingeben.");
+                        "                                   UngÃ¼ltige Eingabe. Bitte eine Zahl zwischen 1 und 4 eingeben.");
                 System.out.println();
             }
 

@@ -70,7 +70,7 @@ public class Player {
         System.out.println("Viererpasch: " + viererpasch);
         System.out.println("FullHouse: " + fullHouse);
         System.out.println("KleineStrasse: " + kleineStrasse);
-        System.out.println("GroßeStrasse: " + grosseStrasse);
+        System.out.println("GrosseStrasse: " + grosseStrasse);
         System.out.println("Kniffel: " + kniffel);
         System.out.println("Chance: " + chance);
         System.out.println("GesamtUnten: " + gesamtUnten);
@@ -168,7 +168,7 @@ public class Player {
     public int getKleineStrasse(){
         return kleineStrasse;
     }
-    public int getGroßeStrasse(){
+    public int getGrosseStrasse(){
         return grosseStrasse;
     }
     public int getKniffel(){
@@ -230,7 +230,7 @@ public class Player {
     public void setKleineStrasse(int kleineStrasse){
         this.kleineStrasse = kleineStrasse;
     }
-    public void setGroßeStrasse(int grosseStrasse){
+    public void setGrosseStrasse(int grosseStrasse){
         this.grosseStrasse = grosseStrasse;
     }
     public void setKniffel(int kniffel){
