@@ -4,4 +4,8 @@
     ]
 ,   "java.project.outputPath": 
         "bin"
+,
+    "java.project.encoding": 
+        "setDefault"
+,
 }

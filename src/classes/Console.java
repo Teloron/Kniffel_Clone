@@ -4,54 +4,45 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 public class Console {
+    private static String[][] UMLAUT_REPLACEMENTS = { { "Ä", "Ae" }, { "Ü", "Ue" }, { "Ö", "Oe" }, { "ä", "ae" },
+            { "ü", "ue" }, { "ö", "oe" }, { "ß", "ss" } };
 
-    private static String filepath;
+    public static String replaceUmlaute(String orig) {
+        String result = orig;
+
+        for (int i = 0; i < UMLAUT_REPLACEMENTS.length; i++) {
+            result = result.replaceAll(UMLAUT_REPLACEMENTS[i][0], UMLAUT_REPLACEMENTS[i][1]);
+        }
+
+        return result;
+    }
 
     // Method to print the gfx files in Console
-    public static void printGFX(String filename) {
-        // get the filepath of the gfx file
-        filepath = getFilepath(filename.toUpperCase());
-        if (filepath == null) {
-            System.out.println("File has no path");
+    public static void printGFX(FileEnums filename) {
+        String space = "                                                ";
+        if (filename.getFilepath() == null) {
+            System.out.println("Could not determine filepath");
             return;
         }
         // open the file and print contents to console
 
-        try (BufferedReader in = new BufferedReader(new FileReader(filepath))) {
+        try (BufferedReader in = new BufferedReader(new FileReader(filename.getFilepath()))) {
             String line = in.readLine();
             while (line != null) {
                 System.out.println(line);
                 line = in.readLine();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + filepath);
-            return;
+            System.out.println(space + filename.getPlaceholderText());
+            // return;
+        } catch (IOException e) {
+            System.out.println(space + filename.getPlaceholderText());
         }
-        catch (IOException e) {
-            System.out.println("Error reading file: " + filepath);
-        }
-    }
-
-    // Method to get the path to gfx file through the enum
-    private static String getFilepath(String filename) {
-        Files file = Files.valueOf(filename.toUpperCase());
-        // get the filepath of the gfx file and return it
-        return switch (file) {
-            case LOGO -> "src/assets/logo.gfx";
-            case CREDITS -> "src/assets/credits.gfx";
-            case DOMINIC -> "src/assets/dominic.gfx";
-            case EXIT -> "src/assets/exit.gfx";
-            case HENNING -> "src/assets/henning.gfx";
-            case KAI -> "src/assets/kai.gfx";
-            case PODIUM -> "src/assets/podium.gfx";
-            case PODIUM_SMALL -> "src/assets/podium_small.gfx";
-            case PODIUM_RACER -> "src/assets/podium_racer.gfx";
-            case SPREE -> "src/assets/spree.gfx";
-            case WINNER -> "src/assets/winner.gfx";
-            default -> null;
-        };
     }
 
     // Method to clear the console Window
@@ -76,6 +67,7 @@ public class Console {
         }
 
     }
+
     // Method to pause the program and prompt the user to press enter to do anything
     public static void promptEnterKey(String message) {
         message = message.toUpperCase();
@@ -94,8 +86,16 @@ public class Console {
     }
 
     public static String getInput() {
-        return System.console().readLine();
-    }
+        Scanner scanner = new Scanner(System.in, Charset.defaultCharset());
+        String input = scanner.nextLine();
+        // return input;
 
+        //String input = System.console().readLine("", StandardCharsets.UTF_8);
+        // ByteBuffer buff = StandardCharsets.UTF_8.encode(input);
+        String convertedInput = replaceUmlaute(input);
+        return convertedInput; // utf8
+
+
+    }
 
 }

@@ -1,13 +1,12 @@
 package classes;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
     
     private int playerNumber = 1;
-    private String name = "default";
+    private String name;
     private int score = 0;
     private int einsen = -1;
     private int zweien = -1;

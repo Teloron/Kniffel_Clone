@@ -68,8 +68,8 @@ public class Highscore {
     }
 
     public static void showHighscore(){
-        Console.printGFX("logo");
-        Console.printGFX("podium_racer");
+        Console.printGFX(classes.FileEnums.LOGO);
+        Console.printGFX(classes.FileEnums.PODIUM_RACER);
         printHighscore();
         System.out.println();
         System.out.print("       ");

@@ -4,10 +4,10 @@ public class Credits extends Console {
 
     private static void printCreditHeader() {
         Console.clear();
-        Console.printGFX("logo");
+        Console.printGFX(FileEnums.LOGO);
         // Console.printGFX("podium");
         System.out.println("\t\t\t\t\t\t  Ein Spiel von:");
-        Console.printGFX("spree");
+        Console.printGFX(FileEnums.SPREE);
     }
 
     public static void printCredits() {
@@ -16,23 +16,23 @@ public class Credits extends Console {
         // Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\t   Projektidee:");
-        Console.printGFX("henning");
+        Console.printGFX(FileEnums.HENNING);
         System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tUse Case Designer:");
-        Console.printGFX("kai");
+        Console.printGFX(FileEnums.DOMINIC);
         System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tUmsetzung in C:");
-        Console.printGFX("dominic");
-        Console.printGFX("henning");
+        Console.printGFX(FileEnums.DOMINIC);
+        Console.printGFX(FileEnums.HENNING);
         System.out.print("      ");
         Console.promptEnterKey();
         printCreditHeader();
         System.out.println("\t\t\t\t\t\tPortierung in Java:");
-        Console.printGFX("dominic");
+        Console.printGFX(FileEnums.DOMINIC);
         System.out.print("      ");
         Console.promptEnterKey();
         Console.clear();

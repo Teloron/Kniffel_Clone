@@ -1,4 +1,6 @@
 
+
+
 import classes.*;
 
 
@@ -11,14 +13,14 @@ public class Kniffel {
         System.setProperty("file.encoding", "UTF-8");
         
         Console.clear();
-        Console.printGFX("logo");
+        Console.printGFX(FileEnums.LOGO);
         Highscore.checkCreateHighscore();
         Console.promptEnterKey();
         Console.clear();
         while(true){
             // Show MainMenu
             Console.clear();
-            Console.printGFX("logo");
+            Console.printGFX(FileEnums.LOGO);
             System.out.printf("\t\t\t\t\t\tWillkommen bei Kniffel!\n\n");
             System.out.printf("\t\t\t\t\t\tOptionen:\n");
             System.out.printf("\t\t\t\t\t\tN - Neues Spiel starten\n");
@@ -51,8 +53,8 @@ public class Kniffel {
                     break;
                 case "B":
                     Console.clear();
-                    Console.printGFX("logo");
-                    Console.printGFX("exit");
+                    Console.printGFX(FileEnums.LOGO);
+                    Console.printGFX(FileEnums.LOGO);
                     System.out.print("   ");
                     Console.promptEnterKey("exit");
                     return;

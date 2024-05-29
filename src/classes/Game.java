@@ -1,5 +1,6 @@
 package classes;
 
+
 public class Game {
     // private List<Player> players = new ArrayList<Player>();
 
@@ -9,7 +10,7 @@ public class Game {
     // Method to get Player Count
     public int getPlayerCount() {
         Console.clear();
-        Console.printGFX("logo");
+        Console.printGFX(FileEnums.LOGO);
         do {
             System.out.print("                                   Bitte Anzahl der Mitspieler eingeben (1-4): ");
 
@@ -35,7 +36,7 @@ public class Game {
 
         for (int i = 0; i < playerCount; i++) {
             Console.clear();
-            Console.printGFX("logo");
+            Console.printGFX(FileEnums.LOGO);
             String name = Player.choosePlayerName(i + 1);
             new Player(i, name);
         }
@@ -55,7 +56,7 @@ public class Game {
                     continue;
                 }
                 Console.clear();
-                Console.printGFX("logo");
+                Console.printGFX(FileEnums.LOGO);
                 playerTurn(player);
                 Console.getInput();
             }
@@ -70,7 +71,7 @@ public class Game {
         playerDices.rollAllDices();
         while (wurf < 4) {
             Console.clear();
-            Console.printGFX("logo");
+            Console.printGFX(FileEnums.LOGO);
             if(wurf < 3){
                 System.out.printf("                                      Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound+1), player.getName(), wurf);
