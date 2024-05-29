@@ -77,14 +77,21 @@ public class Player {
         System.out.println("Endsumme: " + endsumme);
     }
     public int getCalculateSummeOben(){
-        return (einsen + zweien + dreien + vieren + fuenfen + sechsen);
+        int summe = einsen + zweien + dreien + vieren +fuenfen + sechsen;
+        if( summe >= 0){
+            return summe;
+        }else{
+            return 0;
+        }
+        
     }
     public void calculateSummeOben(){
         summeOben = einsen + zweien + dreien + vieren + fuenfen + sechsen;
     }
     
     public int getCalculateBonus(){
-        if (summeOben >= 63){
+        int summe = einsen + zweien + dreien + vieren +fuenfen + sechsen;
+        if (summe >= 63){
             return 35;
         }else{
             return 0;
@@ -107,8 +114,12 @@ public class Player {
         gesamtUnten = (dreierpasch + viererpasch + fullHouse + kleineStrasse + grosseStrasse + kniffel + chance);
     }
     public int getCalculateGesamtUnten(){
-        return (dreierpasch + viererpasch + fullHouse + kleineStrasse + grosseStrasse + kniffel + chance);
-        
+        int summe = dreierpasch + viererpasch + fullHouse + kleineStrasse + grosseStrasse + kniffel + chance;
+        if (summe >= 0){
+            return summe;
+        }else{
+            return 0;
+        }
     }
     
     public void calculateEinsen(Dices dices){

@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class Console {
 
@@ -75,9 +74,6 @@ public class Console {
     }
 
     public static String getInput() {
-
-
-
         Charset nativeCharset = Charset.forName(System.getProperty("native.encoding", Charset.defaultCharset().name()));
         String input = System.console().readLine("", nativeCharset);
         return input;
