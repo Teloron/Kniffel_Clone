@@ -2,10 +2,13 @@ package classes;
 
 
 import java.util.Random;
+import java.util.Arrays;
 
 public class Dices {
     private int[] dices = new int[5];
+    
     private boolean[] dicesToKeep = {false, false, false, false, false};
+
     // private int dice1 = 0;
     // private int dice2 = 0;
     // private int dice3 = 0;
@@ -44,6 +47,14 @@ public class Dices {
             }
         }
     }
+    // Method to sort the dices
+    public int[] getSortedDices(){
+        int[] sortedDices = new int[5];
+        sortedDices = dices;
+        Arrays.sort(sortedDices);
+        return sortedDices;
+    }
+
     // Method to choose which dices to reroll
     public void chooseDicesToKeep() {
         System.out.println("                                       Welche Würfel möchtest du behalten?");
@@ -120,10 +131,9 @@ public class Dices {
         
 
     }
-
-        
-
-
-
+        @Override
+    public String toString() {
+        return Arrays.toString(dices);
+    }
 
 }

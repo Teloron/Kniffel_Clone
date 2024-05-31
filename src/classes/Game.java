@@ -72,6 +72,7 @@ public class Game {
         while (wurf < 4) {
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
+            Scoreboard.printScoreboard();
             if(wurf < 3){
                 System.out.printf("                                      Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound+1), player.getName(), wurf);
@@ -81,6 +82,7 @@ public class Game {
                 System.out.printf("                                      Runde %d: Ergebnis nach dem letzten Wurf von %s.\n"
                                                                                     ,(currentRound+1), player.getName());
                 playerDices.printDices();
+                player.scoreChoice(playerDices);
             }
             wurf++;
         }

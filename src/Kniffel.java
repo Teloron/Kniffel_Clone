@@ -1,6 +1,8 @@
 
 
 
+
+
 import classes.*;
 
 
@@ -10,6 +12,8 @@ public class Kniffel {
     public static void main(String[] args) {
         String choise;
         boolean wrongChoise = false;
+        //Dices dice = new Dices();
+        //Player player1 = new Player(1, "Player 1");
         System.setProperty("file.encoding", "UTF-8");
         System.setProperty("console.encoding", "UTF-8");
         System.setProperty("input.encoding", "UTF-8");
@@ -17,6 +21,16 @@ public class Kniffel {
         Console.clear();
         Console.printGFX(FileEnums.LOGO);
         Highscore.checkCreateHighscore();
+
+        // Testing and Debugging
+        // while(player1.getChance() == -1){
+        //     dice.rollAllDices();
+        //     System.out.println(Arrays.toString(dice.getSortedDices()));
+
+        //     player1.calculateChance(dice);
+        //     System.out.println(player1.getChance());
+        // }
+        
         Console.promptEnterKey();
         Console.clear();
         while(true){
