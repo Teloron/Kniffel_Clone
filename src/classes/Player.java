@@ -157,10 +157,10 @@ public class Player {
 
     public int getCalculateGesamtOben() {
         int summe = getCalculateSummeOben() + getCalculateBonus();
-        if (summe > 0){
+        if (summe > 0) {
             gesamtOben = summe;
             return gesamtOben;
-        }else{
+        } else {
             return 0;
         }
     }
@@ -171,25 +171,25 @@ public class Player {
 
     public void calculateGesamtUnten() {
         int summe = 0;
-        if(dreierpasch > 0){
+        if (dreierpasch > 0) {
             summe += dreierpasch;
-        } 
-        if(viererpasch > 0){
+        }
+        if (viererpasch > 0) {
             summe += viererpasch;
         }
-        if(fullHouse > 0){
+        if (fullHouse > 0) {
             summe += fullHouse;
         }
-        if(kleineStrasse > 0){  
+        if (kleineStrasse > 0) {
             summe += kleineStrasse;
         }
-        if(grosseStrasse > 0){
+        if (grosseStrasse > 0) {
             summe += grosseStrasse;
         }
-        if(kniffel > 0){
+        if (kniffel > 0) {
             summe += kniffel;
         }
-        if(chance > 0){
+        if (chance > 0) {
             summe += chance;
         }
         gesamtUnten = summe;
@@ -197,28 +197,28 @@ public class Player {
 
     public int getCalculateGesamtUnten() {
         int summe = 0;
-        if(dreierpasch > 0){
+        if (dreierpasch > 0) {
             summe += dreierpasch;
-        } 
-        if(viererpasch > 0){
+        }
+        if (viererpasch > 0) {
             summe += viererpasch;
         }
-        if(fullHouse > 0){
+        if (fullHouse > 0) {
             summe += fullHouse;
         }
-        if(kleineStrasse > 0){  
+        if (kleineStrasse > 0) {
             summe += kleineStrasse;
         }
-        if(grosseStrasse > 0){
+        if (grosseStrasse > 0) {
             summe += grosseStrasse;
         }
-        if(kniffel > 0){
+        if (kniffel > 0) {
             summe += kniffel;
         }
-        if(chance > 0){
+        if (chance > 0) {
             summe += chance;
         }
-        
+
         if (summe >= 0) {
             gesamtUnten = summe;
             return summe;
@@ -240,98 +240,378 @@ public class Player {
     public void calculateEndsumme() {
         endsumme = getCalculateGesamtOben() + getCalculateGesamtUnten();
     }
-    // Method to let the Player Choose where to score and update Scores accordingly
-    public void scoreChoice(Dices dices){
-        System.out.println("                                      In welchem Feld soll das Würfelergebnis eingetragen werden?");
-        System.out.print("                                      Auswahl:");
-        String input =Console.getInput();
-        while(input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "6" && input != "7" && input != "8" && input != "9" && input != "10" && input != "11" && input != "12" && input != "13"){
-            switch(input){
-                // TODO Cases for player Choice
+    public int askForAction() {
+        int choice;
+        System.out.println("Ergebnis eintragen oder Feld streichen?");
+        System.out.println("(1) Eintragen | (2) Feld streichen | (B) Anderes Feld auswählen\nIhre Auswahl: ");
+        do {
+            String input = Console.getInput().toUpperCase();
+            switch (input) {
                 case "1":
-
+                    choice = 1;
+                    break;
                 case "2":
+                    choice = 2;
+                    break;
+                case "B":
+                    choice = 0;
+                    break;
+                default:
+                    choice = -1;
+                    System.out.println("Ungültige Eingabe.");
+            }
+        } while (choice != 1 && choice != 2 && choice != 0);
+        return choice;
+    }
+    // Method to let the Player Choose where to score and update Scores accordingly
+    public void scoreChoice(Dices dices) {
+        boolean validChoice = false;
+        int input = 0;
+        while (!validChoice) {
+            System.out.println(
+                    "                                      In welchem Feld soll das Würfelergebnis eingetragen werden?");
+            System.out.print("                                      Auswahl:");
+            do {
+                try{
+                    input = Integer.parseInt(Console.getInput());
+                }catch(NumberFormatException e){
 
-                case "3":
+                }
+                
+            }while (input != 1 && input != 2 && input != 3 && input != 4 && input != 5 && input != 6 && input != 7 && input != 8 && input != 9 && input != 10 && input != 11 && input != 12 && input != 13);
+            switch (input) {
 
-                case "4":
+                case 1:
+                    if (einsen != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            einsen = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateEinsen(dices);
+                            validChoice = true;
+                        }
+                    }
 
-                case "5":
+                    break;
 
-                case "6":
+                case 2:
+                    if (zweien != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            zweien = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateZweien(dices);
+                            validChoice = true;
+                        }
+                    }
 
-                case "7":
+                    break;
 
-                case "8":
+                case 3:
+                    if (dreien != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            dreien = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateDreien(dices);
+                            validChoice = true;
+                        }
+                    }
 
-                case "9":
+                    break;
 
-                case "10":
+                case 4:
+                    if (vieren != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            vieren = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateVieren(dices);
+                            validChoice = true;
+                        }
+                    }
 
-                case "11":
+                    break;
 
-                case "12":
+                case 5:
+                    if (fuenfen != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            fuenfen = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateFuenfen(dices);
+                            validChoice = true;
+                        }
+                    }
 
-                case "13":
+                    break;
+
+                case 6:
+                    if (sechsen != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            sechsen = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateSechsen(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 7:
+                    if (dreierpasch != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            dreierpasch = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateDreierpasch(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 8:
+                    if (viererpasch != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            viererpasch = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateViererpasch(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 9:
+                    if (fullHouse != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            fullHouse = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateFullHouse(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 10:
+                    if (kleineStrasse != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            kleineStrasse = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateKleineStrasse(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 11:
+                    if (grosseStrasse != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            grosseStrasse = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateGrosseStrasse(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 12:
+                    if (kniffel != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            kniffel = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateKniffel(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
+
+                case 13:
+                    if (chance != -1) {
+                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                    } else {
+                        int action = askForAction();
+                        if (action == 2) {
+                            chance = 0;
+                            validChoice = true;
+                        }
+                        if (action == 0) {
+                            continue;
+                        }
+                        if (action == 1) {
+                            calculateChance(dices);
+                            validChoice = true;
+                        }
+                    }
+
+                    break;
 
                 default:
-            } 
-
+                    System.out.println("Ungültige Eingabe.");
+            }
         }
     }
+
     // Methods to calculate dice Scores
     public void calculateEinsen(Dices dices) {
         einsen = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 1) {
-                einsen++;
+                counter++;
             }
         }
+        einsen = counter * 1;
     }
 
     public void calculateZweien(Dices dices) {
         zweien = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 2) {
-                zweien++;
+                zweien += 2;
             }
         }
+        zweien = counter * 2;
     }
 
     public void calculateDreien(Dices dices) {
         dreien = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 3) {
-                dreien++;
+                counter++;
             }
         }
+        dreien = counter * 3;
     }
 
     public void calculateVieren(Dices dices) {
         vieren = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 4) {
-                vieren++;
+                counter++;
             }
         }
+        vieren = counter * 4;
     }
 
     public void calculateFuenfen(Dices dices) {
         fuenfen = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 5) {
-                fuenfen++;
+                counter++;
             }
+            fuenfen = counter * 5;
         }
     }
 
     public void calculateSechsen(Dices dices) {
         sechsen = 0;
+        int counter = 0;
         for (int i = 0; i < 5; i++) {
             if (dices.getDice(i) == 6) {
-                sechsen++;
+                counter++;
             }
         }
+        sechsen = counter * 6;
     }
 
     // Methods to calculate special dice rolls
@@ -448,15 +728,15 @@ public class Player {
                 break;
             }
         }
-        if(kniffelDetected){
+        if (kniffelDetected) {
             kniffel = 50;
-        }  
+        }
     }
 
     // Method to calculate the score for chance field
-    public void calculateChance(Dices dice){
+    public void calculateChance(Dices dice) {
         int chanceValue = 0;
-        for(int point : dice.getSortedDices()){
+        for (int point : dice.getSortedDices()) {
             chanceValue += point;
         }
         chance = chanceValue;

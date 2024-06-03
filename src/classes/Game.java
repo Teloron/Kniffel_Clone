@@ -83,6 +83,7 @@ public class Game {
                                                                                     ,(currentRound+1), player.getName());
                 playerDices.printDices();
                 player.scoreChoice(playerDices);
+                Scoreboard.printScoreboard();
             }
             wurf++;
         }
