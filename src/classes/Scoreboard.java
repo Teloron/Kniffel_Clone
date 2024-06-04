@@ -50,7 +50,7 @@ public class Scoreboard {
                 "                     _______________________ _______________________ _______________________ _______________________ ");
         System.out.println(
                 "                    |                       |                       |                       |                       |");
-        System.out.printf("                    |%19s    |%19s    |%19s    |%19s    | \n",
+        System.out.printf("                    |%17s      |%17s      |%17s      |%17s      | \n",
                 Player.players.get(0).getName(), Player.players.get(1).getName(), Player.players.get(2).getName(),
                 Player.players.get(3).getName());
 

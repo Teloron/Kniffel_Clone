@@ -32,21 +32,24 @@ public class Kniffel {
             // Show MainMenu
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
-            System.out.printf("\t\t\t\t\t\tWillkommen bei Kniffel!\n\n");
-            System.out.printf("\t\t\t\t\t\tOptionen:\n");
-            System.out.printf("\t\t\t\t\t\tN - Neues Spiel starten\n");
-            System.out.printf("\t\t\t\t\t\tH - Highscore anzeigen\n");
-            System.out.printf("\t\t\t\t\t\tC - Credits anzeigen\n");
-            System.out.printf("\t\t\t\t\t\tB - Beenden\n\n");
+            System.out.println(Console.menuSpace + "Willkommen bei Kniffel!\n");
+            System.out.println(Console.menuSpace + "Optionen:");
+            System.out.println(Console.menuSpace + "N - Neues Spiel starten");
+            System.out.println(Console.menuSpace + "H - Highscore anzeigen");
+            System.out.println(Console.menuSpace + "C - Credits anzeigen");
+            System.out.println(Console.menuSpace + "B - Beenden\n");
             // Get input               
             if(wrongChoise){
-                System.out.printf("\t\t\t\t\t  Bitte eine gültige Auswahl treffen.\n");
+                System.out.println(Console.menuSpace + "Falsche Eingabe.");
+                System.out.print(Console.menuSpace + "Bitte eine gültige Auswahl treffen: ");
+            }else{
+                System.out.printf(Console.menuSpace + "Triff Deine Auswahl: ");
             }
-            System.out.printf("\t\t\t\t\t\tTriff Deine Auswahl: ");
+            
             choise = Console.getInput().toUpperCase();
             switch(choise){
                 case "N":
-                    // TODO Start Game
+                    
                     Game game = new Game();
                     game.startGameWithPlayers();
                     // TODO Gameplay Loop
@@ -70,9 +73,7 @@ public class Kniffel {
                     Console.promptEnterKey("exit");
                     return;
                 default:
-                    System.out.println("\t\t\t\t\t\tUngültige Auswahl!");
-                    System.out.print("         ");
-                    Console.promptEnterKey();
+                    wrongChoise = true;
                     break;
             }
         }

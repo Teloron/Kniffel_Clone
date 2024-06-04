@@ -6,14 +6,9 @@ import java.util.Arrays;
 
 public class Dices {
     private int[] dices = new int[5];
-    
+
     private boolean[] dicesToKeep = {false, false, false, false, false};
 
-    // private int dice1 = 0;
-    // private int dice2 = 0;
-    // private int dice3 = 0;
-    // private int dice4 = 0;
-    // private int dice5 = 0;
     Random rand = new Random();
 
     // Method to get specific dice
@@ -55,10 +50,14 @@ public class Dices {
         return sortedDices;
     }
 
+    public void sortDices(){
+        Arrays.sort(dices);
+    }
+
     // Method to choose which dices to reroll
     public void chooseDicesToKeep() {
-        System.out.println("                                       Welche Würfel möchtest du behalten?");
-        System.out.print("                                       Gewählte Würfel: ");
+        System.out.println(Console.space + "Welche Würfel möchtest du behalten?");
+        System.out.print(Console.space + "Gewählte Würfel: ");
         
         String input = Console.getInput();
         
@@ -72,15 +71,15 @@ public class Dices {
             try {
                 dicesToKeep[diceIndex] = true;
             }catch(ArrayIndexOutOfBoundsException e){
-                System.out.println("                    Ungültige Eingabe. Bitte gib je Würfel nur eine Zahl zwischen 1 und 5 ein.");
+                System.out.println(Console.space + "Ungültige Eingabe. Bitte gib je Würfel nur eine Zahl zwischen 1 und 5 ein.");
                 chooseDicesToKeep();
             }
         }
     }
 
     // Method to print the dices to console in fancy way
-    public void printDices(){
-        String space = "                    ";
+    public void printDices(boolean sub){
+        String space = "                   ";
         char point = 'o', nopoint = ' ';
         // 1. Row
         System.out.print(space);
@@ -124,10 +123,16 @@ public class Dices {
         System.out.println();
                 // Print dice Numbers
         System.out.print(space);
-        for (int i = 0; i < dices.length; i++){
+        if(sub){
+            for (int i = 0; i < dices.length; i++){
             System.out.printf("         %d    ",i+1);
+            
         }
-        System.out.println();
+            System.out.println();
+        }else{
+            System.out.println();
+        }
+        
         
 
     }

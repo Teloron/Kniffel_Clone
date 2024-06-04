@@ -28,6 +28,8 @@ public class Player {
     private int endsumme = 0;
     private boolean finished = false;
     boolean isActive = true;
+    private String space = "                           ";
+
 
     public static List<Player> players = new ArrayList<Player>();
 
@@ -52,7 +54,7 @@ public class Player {
     }
 
     public static String choosePlayerName(int playerNumber) {
-        System.out.printf("                                   Bitte den Namen von Spieler %d eingeben: ", playerNumber);
+        System.out.printf(Console.space + "Bitte den Namen von Spieler %d eingeben: ", playerNumber);
 
         String playerName = Console.getInput();
         return playerName;
@@ -91,9 +93,6 @@ public class Player {
         if (zweien > 0) {
             summe += zweien;
         }
-        if (zweien > 0) {
-            summe += zweien;
-        }
         if (dreien > 0) {
             summe += dreien;
         }
@@ -106,20 +105,14 @@ public class Player {
         if (sechsen > 0) {
             summe += sechsen;
         }
-        if (summe >= 0) {
-            return summe;
-        } else {
-            return 0;
-        }
+        summeOben = summe;
+        return summeOben;
     }
 
     public void calculateSummeOben() {
         int summe = 0;
         if (einsen > 0) {
             summe += einsen;
-        }
-        if (zweien > 0) {
-            summe += zweien;
         }
         if (zweien > 0) {
             summe += zweien;
@@ -140,29 +133,30 @@ public class Player {
     }
 
     public int getCalculateBonus() {
-        int summe = getCalculateSummeOben();
-        if (summe >= 63) {
+        //int summe = getCalculateSummeOben();
+        if (summeOben >= 63) {
+            bonus = 35;
             return 35;
         } else {
+            bonus = 0;
             return 0;
         }
 
     }
 
     public void calculateBonus() {
+    
         if (summeOben >= 63) {
             bonus = 35;
+        }else{
+            bonus = 0;
         }
     }
 
     public int getCalculateGesamtOben() {
         int summe = getCalculateSummeOben() + getCalculateBonus();
-        if (summe > 0) {
-            gesamtOben = summe;
-            return gesamtOben;
-        } else {
-            return 0;
-        }
+        gesamtOben = summe;
+        return gesamtOben;
     }
 
     public void calculateGesamtOben() {
@@ -218,32 +212,27 @@ public class Player {
         if (chance > 0) {
             summe += chance;
         }
+        gesamtUnten = summe;
+        return gesamtUnten;
 
-        if (summe >= 0) {
-            gesamtUnten = summe;
-            return summe;
-        } else {
-            return 0;
-        }
     }
 
     public int getCalculateEndsumme() {
         int summe = getCalculateGesamtOben() + getCalculateGesamtUnten();
-        if (summe >= 0) {
-            endsumme = summe;
-            return summe;
-        } else {
-            return 0;
-        }
+        endsumme = summe;
+        return summe;
+
     }
 
     public void calculateEndsumme() {
         endsumme = getCalculateGesamtOben() + getCalculateGesamtUnten();
     }
-    public int askForAction() {
+    public int askForAction(Dices dices) {
+        
         int choice;
-        System.out.println("Ergebnis eintragen oder Feld streichen?");
-        System.out.println("(1) Eintragen | (2) Feld streichen | (B) Anderes Feld auswählen\nIhre Auswahl: ");
+        System.out.println(space + "Ergebnis eintragen oder Feld streichen?");
+        System.out.println(space + "(1) Eintragen | (2) Feld streichen | (B) Anderes Feld auswählen");
+        System.out.print(space + "Deine Wahl: ");
         do {
             String input = Console.getInput().toUpperCase();
             switch (input) {
@@ -258,7 +247,15 @@ public class Player {
                     break;
                 default:
                     choice = -1;
-                    System.out.println("Ungültige Eingabe.");
+                    Console.clear();
+                    Console.printGFX(FileEnums.LOGO);
+                    Scoreboard.printScoreboard();
+                    dices.printDices(false);
+                    System.out.println(space + "Ergebnis eintragen oder Feld streichen?");
+                    System.out.println(space + "(1) Eintragen | (2) Feld streichen | (B) Anderes Feld auswählen");
+                    System.out.println(space + "Ungültige Eingabe!!!");
+                    System.out.print(space + "Deine Wahl: ");
+
             }
         } while (choice != 1 && choice != 2 && choice != 0);
         return choice;
@@ -267,25 +264,46 @@ public class Player {
     public void scoreChoice(Dices dices) {
         boolean validChoice = false;
         int input = 0;
+        boolean previouslyWrongInput = false;
+        String taken = space + "Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.";
         while (!validChoice) {
-            System.out.println(
-                    "                                      In welchem Feld soll das Würfelergebnis eingetragen werden?");
-            System.out.print("                                      Auswahl:");
-            do {
-                try{
-                    input = Integer.parseInt(Console.getInput());
-                }catch(NumberFormatException e){
+            // Console.clear();
+            // Console.printGFX(FileEnums.LOGO);
+            // Scoreboard.printScoreboard();
+            // dices.printDices(false);
 
+            
+            do {
+                Console.clear();
+                Console.printGFX(FileEnums.LOGO);
+                Scoreboard.printScoreboard();
+                dices.printDices(false);
+                System.out.println( space + "In welchem Feld soll das Würfelergebnis eingetragen werden?");
+                if(previouslyWrongInput){
+                    System.out.println(space + "Ungültige Eingabe. Bitte gib eine Zahl zwischen 1 und 13 ein.");
                 }
+                try{
+                    System.out.print(space + "Deine Wahl: ");
+                    input = Integer.parseInt(Console.getInput());
+
+                }catch(NumberFormatException e){
+                    input = 99;
+                }
+                if(input != 1 && input != 2 && input != 3 && input != 4 && input != 5 && input != 6 && input != 7 && input != 8 && input != 9 && input != 10 && input != 11 && input != 12 && input != 13){
+                    previouslyWrongInput = true;
+                }else{
+                    previouslyWrongInput = false;
+                }
+                
                 
             }while (input != 1 && input != 2 && input != 3 && input != 4 && input != 5 && input != 6 && input != 7 && input != 8 && input != 9 && input != 10 && input != 11 && input != 12 && input != 13);
             switch (input) {
 
                 case 1:
                     if (einsen != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             einsen = 0;
                             validChoice = true;
@@ -303,9 +321,9 @@ public class Player {
 
                 case 2:
                     if (zweien != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             zweien = 0;
                             validChoice = true;
@@ -323,9 +341,9 @@ public class Player {
 
                 case 3:
                     if (dreien != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             dreien = 0;
                             validChoice = true;
@@ -343,9 +361,9 @@ public class Player {
 
                 case 4:
                     if (vieren != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             vieren = 0;
                             validChoice = true;
@@ -363,9 +381,9 @@ public class Player {
 
                 case 5:
                     if (fuenfen != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             fuenfen = 0;
                             validChoice = true;
@@ -383,9 +401,9 @@ public class Player {
 
                 case 6:
                     if (sechsen != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             sechsen = 0;
                             validChoice = true;
@@ -403,9 +421,9 @@ public class Player {
 
                 case 7:
                     if (dreierpasch != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             dreierpasch = 0;
                             validChoice = true;
@@ -423,9 +441,9 @@ public class Player {
 
                 case 8:
                     if (viererpasch != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             viererpasch = 0;
                             validChoice = true;
@@ -443,9 +461,9 @@ public class Player {
 
                 case 9:
                     if (fullHouse != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             fullHouse = 0;
                             validChoice = true;
@@ -463,9 +481,9 @@ public class Player {
 
                 case 10:
                     if (kleineStrasse != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             kleineStrasse = 0;
                             validChoice = true;
@@ -483,9 +501,9 @@ public class Player {
 
                 case 11:
                     if (grosseStrasse != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             grosseStrasse = 0;
                             validChoice = true;
@@ -503,9 +521,9 @@ public class Player {
 
                 case 12:
                     if (kniffel != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             kniffel = 0;
                             validChoice = true;
@@ -523,9 +541,9 @@ public class Player {
 
                 case 13:
                     if (chance != -1) {
-                        System.out.println("Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.");
+                        System.out.println(taken);
                     } else {
-                        int action = askForAction();
+                        int action = askForAction(dices);
                         if (action == 2) {
                             chance = 0;
                             validChoice = true;
@@ -540,9 +558,6 @@ public class Player {
                     }
 
                     break;
-
-                default:
-                    System.out.println("Ungültige Eingabe.");
             }
         }
     }
@@ -551,7 +566,7 @@ public class Player {
     public void calculateEinsen(Dices dices) {
         einsen = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 1) {
                 counter++;
             }
@@ -562,18 +577,17 @@ public class Player {
     public void calculateZweien(Dices dices) {
         zweien = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 2) {
-                zweien += 2;
+                counter++;
             }
         }
         zweien = counter * 2;
     }
 
     public void calculateDreien(Dices dices) {
-        dreien = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 3) {
                 counter++;
             }
@@ -582,9 +596,8 @@ public class Player {
     }
 
     public void calculateVieren(Dices dices) {
-        vieren = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 4) {
                 counter++;
             }
@@ -593,20 +606,18 @@ public class Player {
     }
 
     public void calculateFuenfen(Dices dices) {
-        fuenfen = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 5) {
                 counter++;
-            }
-            fuenfen = counter * 5;
+            } 
         }
+        fuenfen = counter * 5;
     }
 
     public void calculateSechsen(Dices dices) {
-        sechsen = 0;
         int counter = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 6) {
                 counter++;
             }
@@ -634,6 +645,7 @@ public class Player {
             for (int dice : sortedDices) {
                 dreierpasch += dice;
             }
+            System.out.println("Du hast ein Dreierpasch. Deine Punktzahl ist: " + dreierpasch);
         }
     }
 

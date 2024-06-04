@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class Console {
-
+    static String space  = "                                   ";
+    public static String menuSpace = "                                             ";
 
     // Method to print the gfx files in Console
     public static void printGFX(FileEnums filename) {
 
-        String space = "                                                ";
+       // String space = "                                                ";
         if (filename.getFilepath() == null) {
             System.out.println("Could not determine filepath");
             return;
@@ -47,7 +48,7 @@ public class Console {
 
     // Method to pause the program and prompt the user to press enter to continue
     public static void promptEnterKey() {
-        System.out.printf("                                       PRESS ENTER TO CONTINUE");
+        System.out.printf(Console.menuSpace + "PRESS ENTER TO CONTINUE");
         try {
             System.in.read(new byte[2]);
         } catch (IOException e) {
@@ -61,7 +62,7 @@ public class Console {
         message = message.toUpperCase();
         int difference = 8 - message.length();
 
-        System.out.printf("                                         ");
+        System.out.printf(Console.menuSpace);
         for (int i = 0; i < difference; i++) {
             System.out.printf(" ");
         }

@@ -12,7 +12,7 @@ public class Game {
         Console.clear();
         Console.printGFX(FileEnums.LOGO);
         do {
-            System.out.print("                                   Bitte Anzahl der Mitspieler eingeben (1-4): ");
+            System.out.print(Console.space + "Bitte Anzahl der Mitspieler eingeben (1-4): ");
 
             try {
                 humanPlayers = Integer.parseInt(Console.getInput());
@@ -21,7 +21,7 @@ public class Game {
 
             if (humanPlayers < 1 || humanPlayers > 4) {
                 System.out.println(
-                        "                                   UngÃ¼ltige Eingabe. Bitte eine Zahl zwischen 1 und 4 eingeben.");
+                        Console.space + "Ungültige Eingabe. Bitte eine Zahl zwischen 1 und 4 eingeben.");
                 System.out.println();
             }
 
@@ -43,9 +43,6 @@ public class Game {
         for (int i = 0; i < 4-playerCount; i++){
             new Player(i, " ", false);
         }
-        Scoreboard.printScoreboard();
-        Console.getInput();
-
     }
 
     // Method for main Gameplay
@@ -68,25 +65,36 @@ public class Game {
     public void playerTurn(Player player) {
         Dices playerDices = new Dices();
         int wurf = 1;
+        String space = "                                 ";
         playerDices.rollAllDices();
         while (wurf < 4) {
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
             Scoreboard.printScoreboard();
             if(wurf < 3){
-                System.out.printf("                                      Runde %d: %s ist dran mit dem %d. Wurf.\n"
+                System.out.printf(Console.space + "Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound+1), player.getName(), wurf);
-            playerDices.printDices();
+            playerDices.printDices(true);
             playerDices.rerollDices();
             }else{
-                System.out.printf("                                      Runde %d: Ergebnis nach dem letzten Wurf von %s.\n"
+                System.out.printf(space + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n"
                                                                                     ,(currentRound+1), player.getName());
-                playerDices.printDices();
-                player.scoreChoice(playerDices);
-                Scoreboard.printScoreboard();
+                if (wurf < 2){
+                    playerDices.printDices(true);
+                    
+                }else{
+                    playerDices.sortDices();                   
+                    player.scoreChoice(playerDices);
+                    Scoreboard.printScoreboard();
+                }
             }
             wurf++;
         }
+
+        
+    }
+    // TODO End of Game with Player Ranking and Game Highscore
+    public void endGame() {
 
     }
 
