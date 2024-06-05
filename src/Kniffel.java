@@ -1,3 +1,5 @@
+
+
 import classes.*;
 
 
@@ -7,8 +9,6 @@ public class Kniffel {
     public static void main(String[] args) {
         String choise;
         boolean wrongChoise = false;
-        //Dices dice = new Dices();
-        //Player player1 = new Player(1, "Player 1");
         System.setProperty("file.encoding", "UTF-8");
         System.setProperty("console.encoding", "UTF-8");
         System.setProperty("input.encoding", "UTF-8");
@@ -17,18 +17,20 @@ public class Kniffel {
         Console.printGFX(FileEnums.LOGO);
         Highscore.checkCreateHighscore();
 
-        // Testing and Debugging
-        // while(player1.getChance() == -1){
-        //     dice.rollAllDices();
-        //     System.out.println(Arrays.toString(dice.getSortedDices()));
-
-        //     player1.calculateChance(dice);
-        //     System.out.println(player1.getChance());
-        // }
         
         Console.promptEnterKey();
         Console.clear();
         while(true){
+            // Clear lists from previous games
+            if(!Player.players.isEmpty()){
+                Player.players.clear();
+            }
+            if(!Player.winners.isEmpty()){
+                Player.winners.clear();
+            }
+            if(!Highscore.highscores.isEmpty()){
+                Highscore.highscores.clear();
+        }
             // Show MainMenu
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
@@ -49,22 +51,23 @@ public class Kniffel {
             choise = Console.getInput().toUpperCase();
             switch(choise){
                 case "N":
-                    
                     Game game = new Game();
                     game.startGameWithPlayers();
-                    // TODO Gameplay Loop
                     game.gameLoop();
-                    //Console.getInput();
-                    // TODO Game End
-                    // TODO Update and Show Highscore
-                    
+                    game.showEndScreen();
+                    game.updateHighscore();
+                    Highscore.showHighscore();
+
                     break;
+
                 case "H":
                     Highscore.showHighscore();
                     break;
+
                 case "C":
                     Credits.printCredits();
                     break;
+
                 case "B":
                     Console.clear();
                     Console.printGFX(FileEnums.LOGO);
@@ -72,6 +75,7 @@ public class Kniffel {
                     System.out.print("   ");
                     Console.promptEnterKey("exit");
                     return;
+
                 default:
                     wrongChoise = true;
                     break;

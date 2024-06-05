@@ -6,8 +6,12 @@ public class Scoreboard {
     public static void printScoreOrPlaceholder(int score) {
         if (score == -1) { // If score is default value (-1) it means that the field is empty
             System.out.printf("                      ");
-        } else { // If score is not default value, it gets printed
-            System.out.printf("          %-12d", score);
+        }else {
+            if (score == 0) {
+                System.out.printf("         ------       ");
+            }else { // If score is not default value, it gets printed
+                System.out.printf(" %12s         ", score);
+            }
         }
     }
 
@@ -101,11 +105,11 @@ public class Scoreboard {
         }
         System.out.println();
         System.out.println(" | =================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Summe            |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneSummeOben == 0 ? placeholder : playerOneSummeOben, playerTwoSummeOben == 0 ? placeholder : playerTwoSummeOben, playerThreeSummeOben == 0 ? placeholder : playerThreeSummeOben, playerFourSummeOben == 0 ? placeholder : playerFourSummeOben);
+        System.out.printf(" | Summe            |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneSummeOben == 0 ? placeholder : playerOneSummeOben+"  ", playerTwoSummeOben == 0 ? placeholder : playerTwoSummeOben+"  ", playerThreeSummeOben == 0 ? placeholder : playerThreeSummeOben+"  ", playerFourSummeOben == 0 ? placeholder : playerFourSummeOben+"  ");
         System.out.println(" |==================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Bonus (63+ Pkt.) |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneBonus == 0 ? placeholder : playerOneBonus, playerTwoBonus == 0 ? placeholder : playerTwoBonus, playerThreeBonus == 0 ? placeholder : playerThreeBonus, playerFourBonus == 0 ? placeholder : playerFourBonus);
+        System.out.printf(" | Bonus (63+ Pkt.) |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneBonus == 0 ? placeholder : playerOneBonus+"  ", playerTwoBonus == 0 ? placeholder : playerTwoBonus+"  ", playerThreeBonus == 0 ? placeholder : playerThreeBonus+"  ", playerFourBonus == 0 ? placeholder : playerFourBonus+"  ");
         System.out.println(" |==================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Gesamt oben      |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneGesamtOben == 0 ? placeholder : playerOneGesamtOben, playerTwoGesamtOben == 0 ? placeholder : playerTwoGesamtOben, playerThreeGesamtOben == 0 ? placeholder : playerThreeGesamtOben, playerFourGesamtOben == 0 ? placeholder : playerFourGesamtOben);
+        System.out.printf(" | Gesamt oben      |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneGesamtOben == 0 ? placeholder : playerOneGesamtOben+"  ", playerTwoGesamtOben == 0 ? placeholder : playerTwoGesamtOben+"  ", playerThreeGesamtOben == 0 ? placeholder : playerThreeGesamtOben+"  ", playerFourGesamtOben == 0 ? placeholder : playerFourGesamtOben+"  ");
         System.out.println("  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾");
         System.out.println("  __________________ _______________________ _______________________ _______________________ _______________________");
         System.out.print(" | 7 Dreierpasch    |");
@@ -157,11 +161,11 @@ public class Scoreboard {
         }
         System.out.println();
         System.out.println(" | =================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Gesamt unten     |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneGesamtUnten == 0 ? placeholder : playerOneGesamtUnten, playerTwoGesamtUnten == 0 ? placeholder : playerTwoGesamtUnten, playerThreeGesamtUnten == 0 ? placeholder : playerThreeGesamtUnten, playerFourGesamtUnten == 0 ? placeholder : playerFourGesamtUnten);
+        System.out.printf(" | Gesamt unten     |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneGesamtUnten == 0 ? placeholder : playerOneGesamtUnten+"  ", playerTwoGesamtUnten == 0 ? placeholder : playerTwoGesamtUnten+"  ", playerThreeGesamtUnten == 0 ? placeholder : playerThreeGesamtUnten+"  ", playerFourGesamtUnten == 0 ? placeholder : playerFourGesamtUnten+"  ");
         System.out.println(" | =================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Gesamt oben      |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneGesamtOben == 0 ? placeholder : playerOneGesamtOben, playerTwoGesamtOben == 0 ? placeholder : playerTwoGesamtOben, playerThreeGesamtOben == 0 ? placeholder : playerThreeGesamtOben, playerFourGesamtOben == 0 ? placeholder : playerFourGesamtOben);
+        System.out.printf(" | Gesamt oben      |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneGesamtOben == 0 ? placeholder : playerOneGesamtOben+"  ", playerTwoGesamtOben == 0 ? placeholder : playerTwoGesamtOben+"  ", playerThreeGesamtOben == 0 ? placeholder : playerThreeGesamtOben+"  ", playerFourGesamtOben == 0 ? placeholder : playerFourGesamtOben+"  ");
         System.out.println(" | =================|=======================|=======================|=======================|=======================|");
-        System.out.printf(" | Endsumme         |          %-12s |          %-12s |          %-12s |          %-12s | \n", playerOneEndsumme == 0 ? placeholder : playerOneEndsumme, playerTwoEndsumme == 0 ? placeholder : playerTwoEndsumme, playerThreeEndsumme == 0 ? placeholder : playerThreeEndsumme, playerFourEndsumme == 0 ? placeholder : playerFourEndsumme);
+        System.out.printf(" | Endsumme         |   %12s        |   %12s        |   %12s        |   %12s        | \n", playerOneEndsumme == 0 ? placeholder : playerOneEndsumme+"  ", playerTwoEndsumme == 0 ? placeholder : playerTwoEndsumme+"  ", playerThreeEndsumme == 0 ? placeholder : playerThreeEndsumme+"  ", playerFourEndsumme == 0 ? placeholder : playerFourEndsumme+"  ");
         System.out.println("  ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ ");
     }
 }

@@ -26,18 +26,22 @@ public class Player {
     private int chance = -1;
     private int gesamtUnten = 0;
     private int endsumme = 0;
+    private boolean hasNewHighscore = false;
     private boolean finished = false;
-    boolean isActive = true;
+    private boolean isActive = true;
     private String space = "                           ";
 
 
     public static List<Player> players = new ArrayList<Player>();
+    public static List<Player> winners = new ArrayList<Player>();
 
     // Method to add new players
     public Player(int playerNumber, String name) {
         this.playerNumber = playerNumber;
         this.name = name;
+        this.isActive = true;
         players.add(this);
+        
     }
 
     public Player(int playerNumber, String name, boolean isActive) {
@@ -47,43 +51,12 @@ public class Player {
         players.add(this);
     }
 
-    public static void returnPlayerNames() {
-        for (Player player : players) {
-            System.out.println(player.name);
-        }
-    }
-
     public static String choosePlayerName(int playerNumber) {
         System.out.printf(Console.space + "Bitte den Namen von Spieler %d eingeben: ", playerNumber);
 
         String playerName = Console.getInput();
         return playerName;
     }
-
-    // Method to show players score
-    public void showPlayerScore() {
-        System.out.println("Name: " + name);
-        System.out.println("Score: " + score);
-        System.out.println("Einsen: " + einsen);
-        System.out.println("Zweien: " + zweien);
-        System.out.println("Dreien: " + dreien);
-        System.out.println("Vieren: " + vieren);
-        System.out.println("Fuenfen: " + fuenfen);
-        System.out.println("Sechsen: " + sechsen);
-        System.out.println("SummeOben: " + summeOben);
-        System.out.println("Bonus: " + bonus);
-        System.out.println("GesamtOben: " + gesamtOben);
-        System.out.println("Dreierpasch: " + dreierpasch);
-        System.out.println("Viererpasch: " + viererpasch);
-        System.out.println("FullHouse: " + fullHouse);
-        System.out.println("KleineStrasse: " + kleineStrasse);
-        System.out.println("GrosseStrasse: " + grosseStrasse);
-        System.out.println("Kniffel: " + kniffel);
-        System.out.println("Chance: " + chance);
-        System.out.println("GesamtUnten: " + gesamtUnten);
-        System.out.println("Endsumme: " + endsumme);
-    }
-
     // Methods to calculate scores
     public int getCalculateSummeOben() {
         int summe = 0;
@@ -108,30 +81,6 @@ public class Player {
         summeOben = summe;
         return summeOben;
     }
-
-    public void calculateSummeOben() {
-        int summe = 0;
-        if (einsen > 0) {
-            summe += einsen;
-        }
-        if (zweien > 0) {
-            summe += zweien;
-        }
-        if (dreien > 0) {
-            summe += dreien;
-        }
-        if (vieren > 0) {
-            summe += vieren;
-        }
-        if (fuenfen > 0) {
-            summe += fuenfen;
-        }
-        if (sechsen > 0) {
-            summe += sechsen;
-        }
-        summeOben = summe;
-    }
-
     public int getCalculateBonus() {
         //int summe = getCalculateSummeOben();
         if (summeOben >= 63) {
@@ -143,52 +92,11 @@ public class Player {
         }
 
     }
-
-    public void calculateBonus() {
-    
-        if (summeOben >= 63) {
-            bonus = 35;
-        }else{
-            bonus = 0;
-        }
-    }
-
     public int getCalculateGesamtOben() {
         int summe = getCalculateSummeOben() + getCalculateBonus();
         gesamtOben = summe;
         return gesamtOben;
     }
-
-    public void calculateGesamtOben() {
-        gesamtOben = getCalculateSummeOben() + getCalculateBonus();
-    }
-
-    public void calculateGesamtUnten() {
-        int summe = 0;
-        if (dreierpasch > 0) {
-            summe += dreierpasch;
-        }
-        if (viererpasch > 0) {
-            summe += viererpasch;
-        }
-        if (fullHouse > 0) {
-            summe += fullHouse;
-        }
-        if (kleineStrasse > 0) {
-            summe += kleineStrasse;
-        }
-        if (grosseStrasse > 0) {
-            summe += grosseStrasse;
-        }
-        if (kniffel > 0) {
-            summe += kniffel;
-        }
-        if (chance > 0) {
-            summe += chance;
-        }
-        gesamtUnten = summe;
-    }
-
     public int getCalculateGesamtUnten() {
         int summe = 0;
         if (dreierpasch > 0) {
@@ -224,9 +132,6 @@ public class Player {
 
     }
 
-    public void calculateEndsumme() {
-        endsumme = getCalculateGesamtOben() + getCalculateGesamtUnten();
-    }
     public int askForAction(Dices dices) {
         
         int choice;
@@ -263,9 +168,11 @@ public class Player {
     // Method to let the Player Choose where to score and update Scores accordingly
     public void scoreChoice(Dices dices) {
         boolean validChoice = false;
+        boolean previouslyValid = true;
         int input = 0;
         boolean previouslyWrongInput = false;
         String taken = space + "Dieses Feld wurde bereits beschrieben. Bitte andere Auswahl treffen.";
+        String notValid = space + "Eintragung nicht möglich!\n" + space + "Bitte ein anderes Feld auswählen oder streichen.\n";
         while (!validChoice) {
             // Console.clear();
             // Console.printGFX(FileEnums.LOGO);
@@ -278,10 +185,14 @@ public class Player {
                 Console.printGFX(FileEnums.LOGO);
                 Scoreboard.printScoreboard();
                 dices.printDices(false);
+                if(!previouslyValid){
+                    System.out.println(notValid);
+                }
                 System.out.println( space + "In welchem Feld soll das Würfelergebnis eingetragen werden?");
                 if(previouslyWrongInput){
                     System.out.println(space + "Ungültige Eingabe. Bitte gib eine Zahl zwischen 1 und 13 ein.");
                 }
+                previouslyWrongInput = false;
                 try{
                     System.out.print(space + "Deine Wahl: ");
                     input = Integer.parseInt(Console.getInput());
@@ -312,8 +223,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateEinsen(dices);
-                            validChoice = true;
+                            validChoice = calculateEinsen(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -332,8 +245,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateZweien(dices);
-                            validChoice = true;
+                            validChoice = calculateZweien(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -352,8 +267,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateDreien(dices);
-                            validChoice = true;
+                            validChoice = calculateDreien(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -372,8 +289,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateVieren(dices);
-                            validChoice = true;
+                            validChoice = calculateVieren(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -392,8 +311,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateFuenfen(dices);
-                            validChoice = true;
+                            validChoice = calculateFuenfen(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -412,8 +333,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateSechsen(dices);
-                            validChoice = true;
+                            validChoice = calculateSechsen(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -432,8 +355,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateDreierpasch(dices);
-                            validChoice = true;
+                            validChoice = calculateDreierpasch(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -452,8 +377,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateViererpasch(dices);
-                            validChoice = true;
+                            validChoice = calculateViererpasch(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -472,8 +399,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateFullHouse(dices);
-                            validChoice = true;
+                            validChoice = calculateFullHouse(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -492,8 +421,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateKleineStrasse(dices);
-                            validChoice = true;
+                            validChoice = calculateKleineStrasse(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -512,8 +443,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateGrosseStrasse(dices);
-                            validChoice = true;
+                            validChoice = calculateGrosseStrasse(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -532,8 +465,10 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateKniffel(dices);
-                            validChoice = true;
+                            validChoice = calculateKniffel(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
 
@@ -552,29 +487,35 @@ public class Player {
                             continue;
                         }
                         if (action == 1) {
-                            calculateChance(dices);
-                            validChoice = true;
+                            validChoice = calculateChance(dices);
+                            if(!validChoice){
+                                previouslyValid = false;
+                            }
                         }
                     }
-
                     break;
             }
         }
     }
 
     // Methods to calculate dice Scores
-    public void calculateEinsen(Dices dices) {
-        einsen = 0;
+    public boolean calculateEinsen(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 1) {
                 counter++;
             }
         }
-        einsen = counter * 1;
+        if (counter > 0){
+            einsen = counter * 1;
+            return true;
+        }else{
+            return false;
+        }
+        
     }
 
-    public void calculateZweien(Dices dices) {
+    public boolean calculateZweien(Dices dices) {
         zweien = 0;
         int counter = 0;
         for (int i = 1; i < 6; i++) {
@@ -582,52 +523,77 @@ public class Player {
                 counter++;
             }
         }
-        zweien = counter * 2;
+        if (counter > 0){
+            zweien = counter * 2;
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public void calculateDreien(Dices dices) {
+    public boolean calculateDreien(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 3) {
                 counter++;
             }
         }
-        dreien = counter * 3;
+        if (counter > 0){
+            dreien = counter * 3;
+            return true;
+        }else{
+            return false;
+        } 
     }
 
-    public void calculateVieren(Dices dices) {
+    public boolean calculateVieren(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 4) {
                 counter++;
             }
         }
-        vieren = counter * 4;
+        if(counter > 0){
+            vieren = counter * 4;
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public void calculateFuenfen(Dices dices) {
+    public boolean calculateFuenfen(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 5) {
                 counter++;
             } 
         }
-        fuenfen = counter * 5;
+        if (counter > 0){
+            fuenfen = counter * 5;
+            return true;
+        }else{
+            return false;
+        }
     }
 
-    public void calculateSechsen(Dices dices) {
+    public boolean calculateSechsen(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
             if (dices.getDice(i) == 6) {
                 counter++;
             }
         }
-        sechsen = counter * 6;
+        if (counter > 0){
+            sechsen = counter * 6;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     // Methods to calculate special dice rolls
     // Method to check if Dreierpasch is met and set score if it is
-    public void calculateDreierpasch(Dices dices) {
+    public boolean calculateDreierpasch(Dices dices) {
         int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
         int[] sortedDices = dices.getSortedDices();
         for (int dice : sortedDices) {
@@ -645,12 +611,14 @@ public class Player {
             for (int dice : sortedDices) {
                 dreierpasch += dice;
             }
-            System.out.println("Du hast ein Dreierpasch. Deine Punktzahl ist: " + dreierpasch);
+            return true;
+        }else{
+            return false;
         }
     }
 
     // Method to check if Viererpasch is met and set score if it is
-    public void calculateViererpasch(Dices dices) {
+    public boolean calculateViererpasch(Dices dices) {
         int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
         int[] sortedDices = dices.getSortedDices();
         for (int dice : sortedDices) {
@@ -668,11 +636,14 @@ public class Player {
             for (int dice : sortedDices) {
                 viererpasch += dice;
             }
+            return true;
+        }else{
+            return false;
         }
     }
 
     // Method to check if Full House is met and set score if it is
-    public void calculateFullHouse(Dices dices) {
+    public boolean calculateFullHouse(Dices dices) {
         int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
         int[] sortedDices = dices.getSortedDices();
         boolean hasThreeOfAKind = false;
@@ -691,47 +662,52 @@ public class Player {
         }
         if (hasThreeOfAKind && hasTwoOfAKind) {
             fullHouse = 25;
+            return true;
+        }else{
+            return false;
         }
     }
 
     // Method to check if kleine Strasse is met and set score if it is
-    public void calculateKleineStrasse(Dices dices) {
+    public boolean calculateKleineStrasse(Dices dices) {
         int[] sortedDices = dices.getSortedDices();
-        int consecutiveHits = 0;
-        for (int dice = 0; dice < sortedDices.length - 1; dice++) {
-            if ((sortedDices[dice] + 1) == sortedDices[dice + 1]) {
+        int consecutiveHits = 1;
+        for (int dice = 1; dice < sortedDices.length; dice++) {
+            if (sortedDices[dice] == sortedDices[dice-1]+1) {
                 consecutiveHits++;
+                if(consecutiveHits >= 4){
+                    kleineStrasse = 30;
+                    return true;
+                }
             } else {
-                consecutiveHits = consecutiveHits > 3 ? consecutiveHits : 0;
-                if (consecutiveHits == 0 && dice <= 2)
+                if (sortedDices[dice] != sortedDices[dice-1]) {
                     consecutiveHits = 1;
-
-                if (consecutiveHits > 3)
-                    break;
+                }
             }
         }
-        if (consecutiveHits > 3) {
-            kleineStrasse = 30;
-        }
-
+            return false;
     }
 
     // Method to check if grosse Strasse is met and set score if it is
-    public void calculateGrosseStrasse(Dices dices) {
+    public boolean calculateGrosseStrasse(Dices dices) {
         int[] sortedDices = dices.getSortedDices();
-        int consecutiveHits = 0;
-        for (int dice = 0; dice < sortedDices.length - 1; dice++) {
-            if ((sortedDices[dice] + 1) == sortedDices[dice + 1]) {
+        int consecutiveHits = 1;
+        for (int dice = 1; dice < sortedDices.length; dice++) {
+            if (sortedDices[dice] == sortedDices[dice-1]+1) {
                 consecutiveHits++;
             }
         }
-        if (consecutiveHits >= 4) {
+        if (consecutiveHits >= 5) {
             grosseStrasse = 40;
+            return true;
+        }else{
+            return false;
         }
+        
     }
 
     // Method to check if Kniffel is met and set score if it is
-    public void calculateKniffel(Dices dices) {
+    public boolean calculateKniffel(Dices dices) {
         int[] sortedDices = dices.getSortedDices();
         boolean kniffelDetected = true;
         for (int dice : sortedDices) {
@@ -743,18 +719,48 @@ public class Player {
         if (kniffelDetected) {
             kniffel = 50;
         }
+        return kniffelDetected;
     }
 
     // Method to calculate the score for chance field
-    public void calculateChance(Dices dice) {
+    public boolean calculateChance(Dices dice) {
         int chanceValue = 0;
         for (int point : dice.getSortedDices()) {
             chanceValue += point;
         }
-        chance = chanceValue;
+        if(chanceValue > 0){
+            chance = chanceValue;
+        return true;
+        }else{
+            return false;
+        }
+        
     }
 
     // Getter
+    public Player getNextPlayer(){
+        Player nextPlayer = players.get(0);
+        if (playerNumber == 4 || !players.get(playerNumber).getIsActive())
+        {  
+            nextPlayer = players.get(0);
+        }else {
+                nextPlayer = players.get(playerNumber);
+        }
+        return nextPlayer;
+    }
+    public static void getWinners(){
+        int currentHighscore = 0;
+        for (Player player : players){
+            if (player.getEndsumme() > currentHighscore && player.getIsActive()){
+                currentHighscore = player.getEndsumme();
+            }
+        }
+        for (Player player : players){
+            if (player.getEndsumme() == currentHighscore && player.getIsActive()){
+                winners.add(player);
+            }
+        }
+    }
     public int getPlayerNumber() {
         return playerNumber;
     }
@@ -842,6 +848,13 @@ public class Player {
     public boolean getFinished() {
         return finished;
     }
+ 
+    public boolean getIsActive() {
+        return isActive;
+    }
+    public boolean getHasNewHighscore(){
+        return hasNewHighscore;
+    }
 
     // Setter
     public void setScore(int score) {
@@ -923,5 +936,7 @@ public class Player {
     public void setFinished(boolean finished) {
         this.finished = finished;
     }
-
+    public void setHasNewHighscore(boolean hasNewHighscore){
+        this.hasNewHighscore = hasNewHighscore;
+    }
 }

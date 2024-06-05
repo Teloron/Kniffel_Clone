@@ -6,6 +6,14 @@
         "bin"
 ,
     "java.project.encoding": 
-        "setDefault"
+        "setDefault",
+        "diffEditor.codeLens": true,
+        "javascript.referencesCodeLens.enabled": true,
+        "javascript.referencesCodeLens.showOnAllFunctions": true,
+        "typescript.implementationsCodeLens.enabled": true,
+        "typescript.referencesCodeLens.enabled": true,
+        "typescript.referencesCodeLens.showOnAllFunctions": true,
+        "java.implementationsCodeLens.enabled": true,
+        "java.referencesCodeLens.enabled": true
 ,
 }
