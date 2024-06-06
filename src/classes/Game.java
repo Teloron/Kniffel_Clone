@@ -49,7 +49,6 @@ public class Game {
 
     // Method for main Gameplay
     public void gameLoop() {
-        // TODO Change back to 13
         while (currentRound < 13) {
             for (Player player : Player.players) {
                 if(!player.getIsActive()){
@@ -97,7 +96,7 @@ public class Game {
             wurf++;
         }
     }
-    // TODO End of Game with Player Ranking and Game Highscore
+    
     public void showEndScreen() {
 
         Player.getWinners();
@@ -153,7 +152,6 @@ public class Game {
                         Console.printGFX(FileEnums.PODIUM_SMALL);
                         System.out.printf(Console.space + "Herlichen Glückwunsch %s!\n Du hast einen Neuen Highscore erzielt!\n Dein neuer Highscore ist %d Punkte!\n", player.getName(), player.getEndsumme());
                         Console.promptEnterKey();
-                        // TODO Highscore hinzufügen
                         Highscore.addPlayerToHighscore(player);
                         Console.promptEnterKey();
                     }
