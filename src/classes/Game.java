@@ -50,7 +50,7 @@ public class Game {
     // Method for main Gameplay
     public void gameLoop() {
         // TODO Change back to 13
-        while (currentRound < 2) {
+        while (currentRound < 13) {
             for (Player player : Player.players) {
                 if(!player.getIsActive()){
                     continue;
