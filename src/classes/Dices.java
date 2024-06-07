@@ -7,7 +7,8 @@ import java.util.Arrays;
 public class Dices {
     private int[] dices = new int[5];
 
-    private boolean[] dicesToKeep = {false, false, false, false, false};
+    private boolean[] dicesToKeep = new boolean[5];
+    
 
     Random rand = new Random();
 
@@ -33,14 +34,20 @@ public class Dices {
         dices[diceIndex] = rand.nextInt(6)+1;
     }
     // Method to reroll the chosen the dices
-    public void rerollDices() {
+    public boolean rerollDices() {
+        // for(boolean keeper : dicesToKeep) {
+        //     keeper = false;
+        // }
         chooseDicesToKeep();
-        for(int i = 0; i<dicesToKeep.length; i++) {
+        boolean rerolled = false;
+        for(int i = 0; i < dices.length; i++) {
             if(!dicesToKeep[i]) {
                 rollOneDice(i);
                 dicesToKeep[i] = false;
+                rerolled = true;
             }
         }
+        return rerolled;
     }
     // Method to sort the dices
     public int[] getSortedDices(){
@@ -55,21 +62,35 @@ public class Dices {
     }
 
     // Method to choose which dices to reroll
+    // TODO Still have to fix this Method
     public void chooseDicesToKeep() {
         System.out.println(Console.space + "Welche Würfel möchtest du behalten?");
+        System.out.println(Console.space + "(B) um alle würfel zu behhalten");
         System.out.print(Console.space + "Gewählte Würfel: ");
         
-        String input = Console.getInput();
-        
-        String[] numbers = new String[0];
+        String input = Console.getInput().toUpperCase();
+        if (input.equals("")) {
+            return;
+        }
+        for(int i = 0; i < dicesToKeep.length; i++) {
+            dicesToKeep[i] = false;
+        }
+        String[] numbers;
         numbers = input.split("");
         for(String number : numbers) {
+            if(number.equals("B")) {
+                for(int i = 0; i < dicesToKeep.length; i++) {
+                    dicesToKeep[i] = true;
+                    
+                }
+                return;
+            }
             int diceIndex = 0;
             try{
-                diceIndex = Integer.parseInt(number) - 1;
+                diceIndex = Integer.parseInt(number);
             }catch(NumberFormatException e){}
             try {
-                dicesToKeep[diceIndex] = true;
+                dicesToKeep[diceIndex-1] = true;
             }catch(ArrayIndexOutOfBoundsException e){
                 System.out.println(Console.space + "Ungültige Eingabe. Bitte gib je Würfel nur eine Zahl zwischen 1 und 5 ein.");
                 chooseDicesToKeep();

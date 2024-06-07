@@ -55,6 +55,14 @@ public class Player {
         System.out.printf(Console.space + "Bitte den Namen von Spieler %d eingeben: ", playerNumber);
 
         String playerName = Console.getInput();
+        // for(String c : playerName.split("")) {
+        //     if(c.equals('Ä') || c.equals('ä') || c.equals('Ö') || c.equals('ö') || c.equals('Ü') || c.equals('ü') || c.equals('ß')) {
+        //         playerName = choosePlayerName(playerNumber);
+        //     }
+        // }
+        if(playerName.length() == 0){
+            playerName = choosePlayerName(playerNumber);
+        }
         return playerName;
     }
     // Methods to calculate scores
@@ -166,7 +174,7 @@ public class Player {
         return choice;
     }
     // Method to let the Player Choose where to score and update Scores accordingly
-    public void scoreChoice(Dices dices) {
+    public void scoreChoice(Player player, Dices dices, int round) {
         boolean validChoice = false;
         boolean previouslyValid = true;
         int input = 0;
@@ -178,12 +186,11 @@ public class Player {
             // Console.printGFX(FileEnums.LOGO);
             // Scoreboard.printScoreboard();
             // dices.printDices(false);
-
-            
             do {
                 Console.clear();
                 Console.printGFX(FileEnums.LOGO);
                 Scoreboard.printScoreboard();
+                System.out.printf(space + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, player.getName());
                 dices.printDices(false);
                 if(!previouslyValid){
                     System.out.println(notValid);
@@ -709,17 +716,13 @@ public class Player {
     // Method to check if Kniffel is met and set score if it is
     public boolean calculateKniffel(Dices dices) {
         int[] sortedDices = dices.getSortedDices();
-        boolean kniffelDetected = true;
         for (int dice : sortedDices) {
             if (sortedDices[0] != dice) {
-                kniffelDetected = false;
-                break;
+                return false;
             }
         }
-        if (kniffelDetected) {
-            kniffel = 50;
-        }
-        return kniffelDetected;
+        kniffel = 50;
+        return true;
     }
 
     // Method to calculate the score for chance field

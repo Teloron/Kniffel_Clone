@@ -7,7 +7,7 @@ public class Game {
     
 
     private int humanPlayers;
-    int currentRound = 1;
+    private int currentRound = 1;
 
     // Method to get Player Count
     public int getPlayerCount() {
@@ -49,7 +49,7 @@ public class Game {
 
     // Method for main Gameplay
     public void gameLoop() {
-        while (currentRound < 13) {
+        while (currentRound < 14) {
             for (Player player : Player.players) {
                 if(!player.getIsActive()){
                     continue;
@@ -66,6 +66,7 @@ public class Game {
     // Method for one Game Round
     public void playerTurn(Player player) {
         Dices playerDices = new Dices();
+        boolean rerolled = true;
         int wurf = 1;
         String space = "                                 ";
         playerDices.rollAllDices();
@@ -73,24 +74,30 @@ public class Game {
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
             Scoreboard.printScoreboard();
+            
             if(wurf < 3){
                 System.out.printf(Console.space + "Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound), player.getName(), wurf);
-            playerDices.printDices(true);
-            playerDices.rerollDices();
+                playerDices.printDices(true);
+                rerolled =playerDices.rerollDices();
+                if(!rerolled){
+                    wurf = 2;
+                }
             }else{
-                System.out.printf(space + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n"
-                                                                                    ,(currentRound), player.getName());
+                                                              
                 if (wurf < 2){
                     playerDices.printDices(true);
                     
-                }else{
+                }else
+                {
+                    
                     playerDices.sortDices();                   
-                    player.scoreChoice(playerDices);
+                    player.scoreChoice(player, playerDices, currentRound);
                     Scoreboard.printScoreboard();
                     System.out.println(space + "         Die Runde von " + player.getName() + " ist beendet.");
                     System.out.println(space +"         " + player.getNextPlayer().getName() + " ist jetzt an der Reihe.");
                     Console.promptEnterKey();
+                    
                 }
             }
             wurf++;
@@ -145,21 +152,20 @@ public class Game {
     }
     public void updateHighscore(){
         for(Player player : Player.players){
-                if(player.getIsActive()){
-                    player.setHasNewHighscore(Highscore.checkIfPlayerHasHighscore(player));
-                    if(player.getHasNewHighscore()){
-                        Console.printGFX(FileEnums.LOGO);
-                        Console.printGFX(FileEnums.PODIUM_SMALL);
-                        System.out.printf(Console.space + "Herlichen Glückwunsch %s!\n Du hast einen Neuen Highscore erzielt!\n Dein neuer Highscore ist %d Punkte!\n", player.getName(), player.getEndsumme());
-                        Console.promptEnterKey();
-                        Highscore.addPlayerToHighscore(player);
-                        Console.promptEnterKey();
-                    }
-
-                }
+            if(player.getIsActive()){
+                player.setHasNewHighscore(Highscore.checkIfPlayerHasHighscore(player));
             }
-            Console.promptEnterKey();
+            if(player.getHasNewHighscore() && player.getIsActive()){
+                Console.printGFX(FileEnums.LOGO);
+                Console.printGFX(FileEnums.PODIUM_SMALL);
+                System.out.printf("%sHerlichen Glückwunsch %s!\n%s     Du hast einen Neuen Highscore erzielt!\n%s     Dein neuer Highscore beträgt %d Punkte!\n", Console.menuSpace, player.getName(), Console.space, Console.space, player.getEndsumme());
+                Highscore.addPlayerToHighscore(player);
+                Console.promptEnterKey();
+            }
+        }
     }
-
-
 }
+
+
+
+

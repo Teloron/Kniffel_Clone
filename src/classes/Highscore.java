@@ -55,7 +55,7 @@ public class Highscore {
             createSavefile();
             needNewScores = true;
         } catch (IOException e) {
-            System.out.println("Could not create Savefile");
+            System.out.println(Console.menuSpace + "Highscore savefile konnte nicht angelegt werden.");
         }
         if(needNewScores){
             writeNewHighscores();
@@ -75,7 +75,7 @@ public class Highscore {
                 out.flush();
             }
           } catch (IOException e) {
-            System.out.println("Highscore datei konnte nicht angelegt werden.");
+            System.out.println(Console.menuSpace + "Highscore datei konnte nicht angelegt werden.");
           }
     }
     // Method to create Highscore savefile
@@ -84,7 +84,7 @@ public class Highscore {
         try {
             new File(saveDirectory + saveFile).createNewFile();
         } catch (IOException e1) {
-            System.out.println("Highscore konnte nicht angelegt werden.");
+            System.out.println(Console.menuSpace + "Highscore konnte nicht angelegt werden.");
         }
     }
 
@@ -104,9 +104,9 @@ public class Highscore {
                 line = in.readLine();
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Keine Highscores vorhanden");
+            System.out.println(Console.menuSpace + "Keine Highscores vorhanden");
         } catch (IOException e) {
-            System.out.println("Fehler beim lesen des Highscores");
+            System.out.println(Console.menuSpace + "Fehler beim lesen des Highscores");
         }
     }
     public static boolean checkIfPlayerHasHighscore(Player player){
@@ -136,9 +136,10 @@ public class Highscore {
         return false;
     }
     public static void addPlayerToHighscore(Player player) {
-        // Read Highscores from File and append them to Highscores list
         String[] row = new String[2];
+        // Add Score of the Player to Highscores
         new Highscore(player.getEndsumme(), player.getName());
+        // Read Highscores from File and append them to Highscores
         try (BufferedReader in = new BufferedReader(new FileReader(saveDirectory + saveFile))){
             String readLine = in.readLine();
             while(readLine != null){
@@ -152,10 +153,6 @@ public class Highscore {
         }
         // Sort Highscores by score
         Collections.sort(highscores, Comparator.comparing(Highscore::getScore).reversed());
-        // Debugging output
-        // for (Highscore score : highscores) {
-        //     System.out.println(score.getName() + " " + score.getScore());
-        // }
         // Overwrite current Highscores file with new top 10 Highscores
         try (BufferedWriter out = new BufferedWriter(new FileWriter(saveDirectory + saveFile))){
             highscoreLines = 10;
@@ -170,7 +167,7 @@ public class Highscore {
                 out.flush();
             }
           } catch (IOException e) {
-            System.out.println("Highscore konnte nicht angelegt werden.");
+            System.out.println(Console.space + "Highscore konnte nicht angelegt werden.");
           }
     }
 }
