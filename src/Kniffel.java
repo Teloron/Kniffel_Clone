@@ -16,8 +16,6 @@ public class Kniffel {
         Console.clear();
         Console.printGFX(FileEnums.LOGO);
         Highscore.checkCreateHighscore();
-
-        
         Console.promptEnterKey();
         Console.clear();
         while(true){
