@@ -62,7 +62,6 @@ public class Dices {
     }
 
     // Method to choose which dices to reroll
-    // TODO Still have to fix this Method
     public void chooseDicesToKeep() {
         System.out.println(Console.space + "Welche Würfel möchtest du behalten?");
         System.out.println(Console.space + "(B) um alle würfel zu behhalten");

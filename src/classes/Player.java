@@ -29,6 +29,7 @@ public class Player {
     private boolean hasNewHighscore = false;
     private boolean finished = false;
     private boolean isActive = true;
+    private boolean isComputer = false;
     private String space = "                           ";
 
 
@@ -41,7 +42,6 @@ public class Player {
         this.name = name;
         this.isActive = true;
         players.add(this);
-        
     }
 
     public Player(int playerNumber, String name, boolean isActive) {
@@ -855,6 +855,9 @@ public class Player {
     public boolean getIsActive() {
         return isActive;
     }
+    public boolean getIsComputer(){
+        return isComputer;    
+    }
     public boolean getHasNewHighscore(){
         return hasNewHighscore;
     }
@@ -938,6 +941,9 @@ public class Player {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+    public void setIsComputer(boolean isComputer){
+        this.isComputer = isComputer;
     }
     public void setHasNewHighscore(boolean hasNewHighscore){
         this.hasNewHighscore = hasNewHighscore;

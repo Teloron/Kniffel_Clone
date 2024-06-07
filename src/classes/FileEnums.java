@@ -1,6 +1,7 @@
 package classes;
 
 public enum FileEnums {
+    
     LOGO(("src/assets/logo.gfx"), ("KNIFFEL")),
     CREDITS(("src/assets/credits.gfx"), ("CREDITS")),
     DOMINIC(("src/assets/dominic.gfx"), ("DOMINIC")),

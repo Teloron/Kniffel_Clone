@@ -43,7 +43,7 @@ public class Game {
             new Player(i, name);
         }
         for (int i = 1; i < 5-playerCount; i++){
-            new Player(i+playerCount, " ", false);
+            new ComputerEnemy(i+playerCount, " ", false, Difficulty.EASY);
         }
     }
 
@@ -54,9 +54,14 @@ public class Game {
                 if(!player.getIsActive()){
                     continue;
                 }
+                
                 Console.clear();
                 Console.printGFX(FileEnums.LOGO);
-                playerTurn(player);
+                if(player.getIsComputer()){
+                    
+                }else{
+                    playerTurn(player);
+                }
                 //Console.getInput();
             }
             currentRound++;
