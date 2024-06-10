@@ -23,6 +23,12 @@ public class Dices {
             default -> 0;
         };
     }
+    public void setDicesToKeep(boolean[] dicesToKeep){
+        this.dicesToKeep = dicesToKeep;
+    }
+    public int[] getDices(){
+        return dices;
+    }
     // Method to roll all dices
     public void rollAllDices() {
         for(int i = 0; i<dices.length; i++){

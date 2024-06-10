@@ -50,6 +50,9 @@ public class Player {
         this.isActive = isActive;
         players.add(this);
     }
+    public String getSpace(){
+        return space;
+    }
 
     public static String choosePlayerName(int playerNumber) {
         System.out.printf(Console.space + "Bitte den Namen von Spieler %d eingeben: ", playerNumber);
@@ -521,6 +524,20 @@ public class Player {
         }
         
     }
+    public int checkEinsen(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 5) {
+                counter++;
+            } 
+        }
+        if (counter > 0){
+            einsen = counter * 1;
+            return einsen;
+        }else{
+            return 0;
+        }
+    }
 
     public boolean calculateZweien(Dices dices) {
         zweien = 0;
@@ -535,6 +552,20 @@ public class Player {
             return true;
         }else{
             return false;
+        }
+    }
+    public int checkZweien(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 5) {
+                counter++;
+            } 
+        }
+        if (counter > 0){
+            zweien = counter * 2;
+            return zweien;
+        }else{
+            return 0;
         }
     }
 
@@ -552,6 +583,20 @@ public class Player {
             return false;
         } 
     }
+    public int checkDreien(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 5) {
+                counter++;
+            } 
+        }
+        if (counter > 0){
+            dreien = counter * 3;
+            return dreien;
+        }else{
+            return 0;
+        }
+    }
 
     public boolean calculateVieren(Dices dices) {
         int counter = 0;
@@ -565,6 +610,20 @@ public class Player {
             return true;
         }else{
             return false;
+        }
+    }
+    public int checkVieren(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 5) {
+                counter++;
+            } 
+        }
+        if (counter > 0){
+            vieren = counter * 4;
+            return vieren;
+        }else{
+            return 0;
         }
     }
 
@@ -582,6 +641,20 @@ public class Player {
             return false;
         }
     }
+    public int checkFuenfen(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 5) {
+                counter++;
+            } 
+        }
+        if (counter > 0){
+            fuenfen = counter * 5;
+            return fuenfen;
+        }else{
+            return 0;
+        }
+    }
 
     public boolean calculateSechsen(Dices dices) {
         int counter = 0;
@@ -595,6 +668,20 @@ public class Player {
             return true;
         }else{
             return false;
+        }
+    }
+    public int checkSechsen(Dices dices) {
+        int counter = 0;
+        for (int i = 1; i < 6; i++) {
+            if (dices.getDice(i) == 6) {
+                counter++;
+            }
+        }
+        if (counter > 0){
+            sechsen = counter * 6;
+            return sechsen;
+        }else{
+            return 0;
         }
     }
 
@@ -623,6 +710,25 @@ public class Player {
             return false;
         }
     }
+    public boolean checkDreierpasch(Dices dices) {
+        int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
+        int[] sortedDices = dices.getSortedDices();
+        for (int dice : sortedDices) {
+            diceCounter[dice - 1]++;
+        }
+        boolean hasThreeOfAKind = false;
+        for (int count : diceCounter) {
+            if (count >= 3) {
+                hasThreeOfAKind = true;
+                break;
+            }
+        }
+        if (hasThreeOfAKind) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     // Method to check if Viererpasch is met and set score if it is
     public boolean calculateViererpasch(Dices dices) {
@@ -631,18 +737,38 @@ public class Player {
         for (int dice : sortedDices) {
             diceCounter[dice - 1]++;
         }
-        boolean hasThreeOfAKind = false;
+        boolean hasFourOfAKind = false;
         for (int count : diceCounter) {
             if (count >= 4) {
-                hasThreeOfAKind = true;
+                hasFourOfAKind = true;
                 break;
             }
         }
-        if (hasThreeOfAKind) {
+        if (hasFourOfAKind) {
             viererpasch = 0;
             for (int dice : sortedDices) {
                 viererpasch += dice;
             }
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean checkViererpasch(Dices dices) {
+        int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
+        int[] sortedDices = dices.getSortedDices();
+        for (int dice : sortedDices) {
+            diceCounter[dice - 1]++;
+        }
+        boolean hasFourOfAKind = false;
+        for (int count : diceCounter) {
+            if (count >= 4) {
+                hasFourOfAKind = true;
+                break;
+            }
+        }
+        if (hasFourOfAKind) {
             return true;
         }else{
             return false;
@@ -674,6 +800,29 @@ public class Player {
             return false;
         }
     }
+    public boolean checkFullHouse(Dices dices) {
+        int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
+        int[] sortedDices = dices.getSortedDices();
+        boolean hasThreeOfAKind = false;
+        boolean hasTwoOfAKind = false;
+        for (int dice : sortedDices) {
+            diceCounter[dice - 1]++;
+        }
+        for (int count : diceCounter) {
+            if (count >= 3) {
+                hasThreeOfAKind = true;
+            } else {
+                if (count >= 2) {
+                    hasTwoOfAKind = true;
+                }
+            }
+        }
+        if (hasThreeOfAKind && hasTwoOfAKind) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     // Method to check if kleine Strasse is met and set score if it is
     public boolean calculateKleineStrasse(Dices dices) {
@@ -684,6 +833,23 @@ public class Player {
                 consecutiveHits++;
                 if(consecutiveHits >= 4){
                     kleineStrasse = 30;
+                    return true;
+                }
+            } else {
+                if (sortedDices[dice] != sortedDices[dice-1]) {
+                    consecutiveHits = 1;
+                }
+            }
+        }
+            return false;
+    }
+    public boolean checkKleineStrasse(Dices dices) {
+        int[] sortedDices = dices.getSortedDices();
+        int consecutiveHits = 1;
+        for (int dice = 1; dice < sortedDices.length; dice++) {
+            if (sortedDices[dice] == sortedDices[dice-1]+1) {
+                consecutiveHits++;
+                if(consecutiveHits >= 4){
                     return true;
                 }
             } else {
@@ -712,6 +878,21 @@ public class Player {
         }
         
     }
+    public boolean checkGrosseStrasse(Dices dices) {
+        int[] sortedDices = dices.getSortedDices();
+        int consecutiveHits = 1;
+        for (int dice = 1; dice < sortedDices.length; dice++) {
+            if (sortedDices[dice] == sortedDices[dice-1]+1) {
+                consecutiveHits++;
+            }
+        }
+        if (consecutiveHits >= 5) {
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
 
     // Method to check if Kniffel is met and set score if it is
     public boolean calculateKniffel(Dices dices) {
@@ -722,6 +903,15 @@ public class Player {
             }
         }
         kniffel = 50;
+        return true;
+    }
+    public boolean checkKniffel(Dices dices) {
+        int[] sortedDices = dices.getSortedDices();
+        for (int dice : sortedDices) {
+            if (sortedDices[0] != dice) {
+                return false;
+            }
+        }
         return true;
     }
 
