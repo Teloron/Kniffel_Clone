@@ -23,6 +23,9 @@ public class Dices {
             default -> 0;
         };
     }
+    public boolean[] getDicesToKeep(){
+        return dicesToKeep;
+    }
     public void setDicesToKeep(boolean[] dicesToKeep){
         this.dicesToKeep = dicesToKeep;
     }
@@ -54,6 +57,14 @@ public class Dices {
             }
         }
         return rerolled;
+    }
+    public void rerollCOMDices(){
+        for(int i = 0; i < dices.length; i++) {
+            if(!dicesToKeep[i]) {
+                rollOneDice(i);
+                dicesToKeep[i] = false;
+            }
+        }
     }
     // Method to sort the dices
     public int[] getSortedDices(){

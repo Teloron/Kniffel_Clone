@@ -111,12 +111,15 @@ public class Game {
             Console.clear();
             Console.printGFX(FileEnums.LOGO);
             Scoreboard.printScoreboard();
-            
+            playerDices.sortDices();
             if(wurf < 3){
                 System.out.printf(Console.space + "Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound), player.getName(), wurf);
                 playerDices.printDices(true);
                 rerolled = ((ComputerEnemy)player).rerollChoiceComputer(playerDices);
+                if(rerolled){
+                    playerDices.rerollCOMDices();
+                }
                 Console.promptEnterKey();
                 if(!rerolled){
                     wurf = 2;
@@ -130,8 +133,8 @@ public class Game {
                 {
                     
                     playerDices.sortDices();                   
-                    player.scoreChoice(player, playerDices, currentRound);
-                    Scoreboard.printScoreboard();
+                    ((ComputerEnemy)player).computerScoreChoice(playerDices, currentRound);
+                    Console.promptEnterKey();
                     System.out.println(space + "         Die Runde von " + player.getName() + " ist beendet.");
                     System.out.println(space +"         " + player.getNextPlayer().getName() + " ist jetzt an der Reihe.");
                     Console.promptEnterKey();

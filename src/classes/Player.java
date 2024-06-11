@@ -641,6 +641,7 @@ public class Player {
             return false;
         }
     }
+
     public int checkFuenfen(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
@@ -860,6 +861,23 @@ public class Player {
         }
             return false;
     }
+    public boolean checkBeinaheStrasse(Dices dices) {
+        int[] sortedDices = dices.getSortedDices();
+        int consecutiveHits = 1;
+        for (int dice = 1; dice < sortedDices.length; dice++) {
+            if (sortedDices[dice] == sortedDices[dice-1]+1) {
+                consecutiveHits++;
+                if(consecutiveHits >= 3){
+                    return true;
+                }
+            } else {
+                if (sortedDices[dice] != sortedDices[dice-1]) {
+                    consecutiveHits = 1;
+                }
+            }
+        }
+            return false;
+    }
 
     // Method to check if grosse Strasse is met and set score if it is
     public boolean calculateGrosseStrasse(Dices dices) {
@@ -928,6 +946,10 @@ public class Player {
             return false;
         }
         
+    }
+    public int getDiceValues(Dices dices) {
+        int[] sortedDices = dices.getSortedDices();
+        return sortedDices[0] + sortedDices[1] + sortedDices[2] + sortedDices[3] + sortedDices[4];
     }
 
     // Getter

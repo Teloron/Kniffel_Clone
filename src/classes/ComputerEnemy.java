@@ -34,21 +34,37 @@ public class ComputerEnemy extends Player {
         return dicesToKeep;
     }
 
+    /**
+     * Chooses the index of the dice with the highest number of hits in the given
+     * Dices object.
+     *
+     * @param dices the Dices to analyze
+     * @return an int array containing:
+     *         - [0]: The index of the dice with the highest number of hits.
+     * 
+     *         - [1]: The number of hits.
+     * 
+     *         - [2]: The sum of the points achived with this number of hits.
+     */
     public int[] chooseDiceIndex(Dices dices) {
         int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
         int maxValue = 0;
         int maxIndex = 0;
+        int maxHits = 0;
         for (int dice : dices.getDices()) {
             diceCounter[dice - 1]++;
         }
-
-        for (int i = 1; i <= diceCounter.length; i++) {
-            if (diceCounter[i - 1] * i > maxValue) {
-                maxValue = diceCounter[i - 1] * i;
-                maxIndex = i - 1;
+        for (int i = 0; i < diceCounter.length; i++) {
+            if (diceCounter[i] >= maxHits) {
+                maxHits = diceCounter[i];
+                maxIndex = i;
+                maxValue = (i + 1) * maxHits;
             }
         }
-        int[] ret = { maxIndex, maxValue };
+        int[] ret = new int[3];
+        ret[0] = maxIndex;
+        ret[1] = maxHits;
+        ret[2] = maxValue;
         return ret;
     }
 
@@ -56,10 +72,11 @@ public class ComputerEnemy extends Player {
         int[] diceCounter = { 0, 0, 0, 0, 0, 0 };
 
         for (int dice : dices.getDices()) {
-            diceCounter[dice -1]++;
+            diceCounter[dice - 1]++;
         }
         return diceCounter;
     }
+
     // Method that determins what dices the computer should reroll
     // Returns true if at least one dice got rerolled, else returns false
     public boolean rerollChoiceComputer(Dices dices) {
@@ -67,12 +84,17 @@ public class ComputerEnemy extends Player {
         for (int dice : dices.getDices()) {
             diceCounter[dice - 1]++;
         }
+        // DEBUG
+        // int[] dIdx = chooseDiceIndex(dices);
+        // System.out.print("Max Index: " + dIdx[0] + " Max Hits: " + dIdx[1] + " Max Value: " + dIdx[2] + "\n");
+        // dices.sortDices();
+
         // First check if we can reach a kniffel
         for (int i = 0; i < diceCounter.length; i++) {
-
-            if (diceCounter[i] >= 4 && getKniffel() == -1) {
+            if (diceCounter[i] > 4 && getKniffel() == -1) {
                 dices.setDicesToKeep(keepDices(dices, i));
-                return true;
+                // System.out.println("Kniffel wurde ausgelöst");
+                return false;
             }
         }
 
@@ -81,6 +103,7 @@ public class ComputerEnemy extends Player {
             if (checkFullHouse(dices)) {
                 boolean[] dicesToKeep = { true, true, true, true, true };
                 dices.setDicesToKeep(dicesToKeep);
+                // System.out.println("Full House wurde ausgelöst");
                 return false;
             }
         }
@@ -89,64 +112,114 @@ public class ComputerEnemy extends Player {
             if (checkGrosseStrasse(dices)) {
                 boolean[] dicesToKeep = { true, true, true, true, true };
                 dices.setDicesToKeep(dicesToKeep);
+                // System.out.println("Grosse Strasse wurde ausgelöst");
                 return false;
             } else {
                 if (checkKleineStrasse(dices)) {
                     boolean[] dicesToKeep = { true, true, true, true, true };
                     dices.setDicesToKeep(dicesToKeep);
+                    // System.out.println("Kleine Strasse wurde ausgelöst");
                     return false;
                 } else {
-                    for (int i = 0; i < diceCounter.length; i++) {
-                        diceCounter[i] = 0;
-                    }
-                    boolean[] dicesToKeep = { false, false, false, false, false };
-                    for (int i = 0; i < dices.getDices().length; i++) {
-                        if (diceCounter[dices.getDices()[i] - 1] == 0) {
-                            dicesToKeep[i] = true;
+                    if (checkBeinaheStrasse(dices)) {
+                        // System.out.println("Beinahe Strasse wurde ausgelöst");
+                        boolean[] dicesToKeep = { false, false, false, false, false };
+                        int[] diceVal = dices.getDices();
+                        boolean[] valTaken = { false, false, false, false, false, false };
+                        int consecutive = 1;
+                        boolean consecutiveBreak = false;
+                        for (int i = 1; i < diceVal.length; i++) {
+                            if (diceVal[i] == diceVal[i - 1] + 1 && !consecutiveBreak) {
+                                if(!valTaken[diceVal[i]]){
+                                    dicesToKeep[i] = true;
+                                    valTaken[diceVal[i]] = true;
+                                }
+                                if(!valTaken[diceVal[i - 1]]){
+                                    dicesToKeep[i - 1] = true;
+                                    valTaken[diceVal[i - 1]] = true;
+                                }
+                                consecutive++;
+                                if (consecutive >= 3) {
+                                    dices.setDicesToKeep(dicesToKeep);
+                                    return true;
+                                }
+                            } else {
+                                consecutiveBreak = true;
+                                for(int j = 0; j < dicesToKeep.length; j++) {
+                                    dicesToKeep[j] = false;
+                                }
+                                for (int j = 0; j < valTaken.length; j++) {
+                                    valTaken[j] = false;
+                                }
+                                consecutive = 1;
+                            }
                         }
-                    }
-                    dices.setDicesToKeep(dicesToKeep);
-                    return true;
-                }
-            }
+                        for (int i = 2; i < diceVal.length; i++) {
+                            if (diceVal[i] == diceVal[i - 1] + 1 && consecutiveBreak) {
+                                if(!valTaken[diceVal[i]]){
+                                    dicesToKeep[i] = true;
+                                    valTaken[diceVal[i]] = true;
+                                }
+                                if(!valTaken[diceVal[i - 1]]){
+                                    dicesToKeep[i - 1] = true;
+                                    valTaken[diceVal[i - 1]] = true;
+                                }
 
+                                consecutive++;
+                            }
+                        }
+                        dices.setDicesToKeep(dicesToKeep);
+                        return true;
+                    }
+                }
+
+            }
         }
+
         // Reset dice counter
         diceCounter = resetDiceCounter(dices);
+        // TODO Viererpasch and Dreierpasch need some optimisation so they wont trigger on early rounds if it consists only of low numbers.
         // Choose to keep Viererpasch if possible
-        if(getViererpasch() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 4){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getViererpasch() == -1 && chooseDiceIndex(dices)[1] >= 4) {
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
+                } else {
+                    if (dices.getDices()[i] > 3) {
+                        keepDices[i] = true;
+                    }
                 }
-                if(dices.getDices()[i] > 3){
-                    keepDices[i] = true;
-                }
+
             }
             dices.setDicesToKeep(keepDices);
+            // System.out.println("Viererpasch wurde ausgelöst");
             return true;
         }
         // Choose to keep Dreierpasch if possible
-        if(getDreierpasch() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 3){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getDreierpasch() == -1 && chooseDiceIndex(dices)[1] >= 3) {
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
+                } else {
+                    if (dices.getDices()[i] > 3) {
+                        keepDices[i] = true;
+                    }
                 }
-                if(dices.getDices()[i] > 3){
-                    keepDices[i] = true;
-                }
+
             }
             dices.setDicesToKeep(keepDices);
+            // System.out.println("Dreierpasch wurde ausgelöst");
             return true;
         }
         // Choose to keep one of the top choices if available
         // Sechsen
-        if(getSechsen() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getSechsen() == -1 && chooseDiceIndex(dices)[0] == 5 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Sechsen wurde ausgelöst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -154,10 +227,11 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Fuenfen
-        if(getFuenfen() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getFuenfen() == -1 && chooseDiceIndex(dices)[0] == 4 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Fuenfen wurde ausgelöst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -165,10 +239,11 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Vieren
-        if(getVieren() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getVieren() == -1 && chooseDiceIndex(dices)[0] == 3 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Vieren wurde ausgelöst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -176,10 +251,11 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Dreien
-        if(getDreien() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getDreien() == -1 && chooseDiceIndex(dices)[0] == 2 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Dreien wurde ausgelöst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -187,10 +263,11 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Zweien
-        if(getZweien() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getZweien() == -1 && chooseDiceIndex(dices)[0] == 1 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Zweien wurde ausgelöst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -198,10 +275,11 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Einsen
-        if(getEinsen() == -1 && chooseDiceIndex(dices)[1]/(chooseDiceIndex(dices)[0]+1) >= 2){
-            boolean[] keepDices = {false, false, false, false, false};
-            for(int i = 0; i < dices.getDices().length; i++){
-                if(dices.getDices()[i] == chooseDiceIndex(dices)[0]+1 ){
+        if (getEinsen() == -1 && chooseDiceIndex(dices)[0] == 0 && chooseDiceIndex(dices)[1] >= 2) {
+            // System.out.println("Einsen wurde ausgelösst");
+            boolean[] keepDices = { false, false, false, false, false };
+            for (int i = 0; i < dices.getDices().length; i++) {
+                if (dices.getDices()[i] == chooseDiceIndex(dices)[0] + 1) {
                     keepDices[i] = true;
                 }
             }
@@ -209,102 +287,160 @@ public class ComputerEnemy extends Player {
             return true;
         }
         // Reroll every dice if we cant find anything
-        boolean[] keepDices = {false, false, false, false, false};
+        // System.out.println("Reroll every dice wurde ausgelöst");
+        boolean[] keepDices = { false, false, false, false, false };
         dices.setDicesToKeep(keepDices);
         return true;
     }
 
-    public void computerScoreChoice(Dices dices, int round){
-        
-        Console.printGFX(FileEnums.LOGO);
-        Scoreboard.printScoreboard();
-        System.out.printf(getSpace() + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, getName());
-        dices.printDices(false);
+    public void computerScoreChoice(Dices dices, int round) {
+        boolean alreadyChosen = false;       
+        StringBuilder sbChoice = new StringBuilder(getSpace() + "           " + getName());
 
-        // Eintragung ins Scoreboard nach relevanz
-        if (getKniffel() == -1 && checkKniffel(dices)){
+        // Eintragung ins Scoreboard nach Relevanz
+        // Zuerst die versuchen den Unteren Teil des Scorebocks abzuschließen
+        if (getKniffel() == -1 && checkKniffel(dices) && !alreadyChosen) {
             setKniffel(50);
-            System.out.println(getSpace() + getName()+" hat den Kniffel eingetragen!");
+            sbChoice.append(" hat den Kniffel eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if (getFullHouse() == -1 && checkFullHouse(dices)){
+        if (getFullHouse() == -1 && checkFullHouse(dices) && !alreadyChosen) {
             setFullHouse(25);
-            System.out.println(getSpace() + getName()+" hat da Full House eingetragen!");
+            sbChoice.append(" hat das Full House eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if (getGrosseStrasse() == -1 && checkGrosseStrasse(dices)){
+        if (getGrosseStrasse() == -1 && checkGrosseStrasse(dices) && !alreadyChosen) {
             setGrosseStrasse(40);
-            System.out.println(getSpace() + getName()+" hat die große Straße eingetragen!");
+            sbChoice.append(" hat die große Straße eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getKleineStrasse() == -1 && checkKleineStrasse(dices)){
+        if (getKleineStrasse() == -1 && checkKleineStrasse(dices) && !alreadyChosen) {
             setKleineStrasse(30);
-            System.out.println(getSpace() + getName()+" hat die kleine Straße eingetragen!");
+            sbChoice.append(" hat die kleine Straße eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getViererpasch() == -1 && checkViererpasch(dices)){
+        if (getViererpasch() == -1 && checkViererpasch(dices) && !alreadyChosen) {
             int viererpasch = 0;
             int[] sortedDices = dices.getSortedDices();
             for (int dice : sortedDices) {
                 viererpasch += dice;
             }
             setViererpasch(viererpasch);
-            System.out.println(getSpace() + getName()+" hat den Viererpasch eingetragen!");
+            sbChoice.append(" hat den Viererpasch eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getDreierpasch() == -1 && checkDreierpasch(dices)){
+        if (getDreierpasch() == -1 && checkDreierpasch(dices) && !alreadyChosen) {
             int dreierpasch = 0;
             int[] sortedDices = dices.getSortedDices();
             for (int dice : sortedDices) {
                 dreierpasch += dice;
             }
             setDreierpasch(dreierpasch);
-            System.out.println(getSpace() + getName()+" hat den Dreierpasch eingetragen!");
+            sbChoice.append(" hat den Dreierpasch eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getSechsen() == -1 && checkSechsen(dices) >= 12 ){
+
+        // High value Rolls (mindestens 4 gleiche Würfel) bevorzugen!!
+        if (getSechsen() == -1 && checkSechsen(dices) > 18 && !alreadyChosen) {
             calculateSechsen(dices);
-            System.out.println(getSpace() + getName()+" hat die Sechsen eingetragen!");
+            sbChoice.append(" hat die Sechsen eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getFuenfen() == -1 && checkFuenfen(dices) >= 10 ){
+        if (getFuenfen() == -1 && checkFuenfen(dices) > 15 && !alreadyChosen) {
             calculateFuenfen(dices);
-            System.out.println(getSpace() + getName()+" hat die Fuenfen eingetragen!");
+            sbChoice.append(" hat die Fünfen eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getVieren() == -1 && checkVieren(dices) >= 8 ){
+        if (getVieren() == -1 && checkVieren(dices) > 12 && !alreadyChosen) {
             calculateVieren(dices);
-            System.out.println(getSpace() + getName()+" hat die Vieren eingetragen!");
+            sbChoice.append(" hat die Vieren eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getDreien() == -1 && checkDreien(dices) >= 6 ){
+        if (getDreien() == -1 && checkDreien(dices) > 9 && !alreadyChosen) {
             calculateDreien(dices);
-            System.out.println(getSpace() + getName()+" hat die Dreien eingetragen!");
+            sbChoice.append(" hat die Dreien eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getZweien() == -1 && checkZweien(dices) >= 4 ){
+        if (getZweien() == -1 && checkZweien(dices) > 6 && !alreadyChosen) {
             calculateZweien(dices);
-            System.out.println(getSpace() + getName()+" hat die Zweien eingetragen!");
+            sbChoice.append(" hat die Zweien eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
         }
-        if(getEinsen() == -1 && checkEinsen(dices) >= 2 ){
+        if (getEinsen() == -1 && checkEinsen(dices) > 3 && !alreadyChosen) {
             calculateEinsen(dices);
-            System.out.println(getSpace() + getName()+" hat die Einsen eingetragen!");
+            sbChoice.append(" hat die Einsen eingetragen!");
             Console.promptEnterKey();
-            return;
+            alreadyChosen = true;
+        }
+
+        
+
+        // Low Value Rolls als Notlösung
+        if (getEinsen() == -1 && checkEinsen(dices) >= 2 && !alreadyChosen) {
+            calculateEinsen(dices);
+            sbChoice.append(" hat die Einsen eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if (getZweien() == -1 && checkZweien(dices) >= 4 && !alreadyChosen) {
+            calculateZweien(dices);
+            sbChoice.append(" hat die Zweien eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if (getDreien() == -1 && checkDreien(dices) >= 6 && !alreadyChosen) {
+            calculateDreien(dices);
+            sbChoice.append(" hat die Dreien eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if (getVieren() == -1 && checkVieren(dices) >= 8 && !alreadyChosen) {
+            calculateVieren(dices);
+            sbChoice.append(" hat die Vieren eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if (getFuenfen() == -1 && checkFuenfen(dices) >= 10 && !alreadyChosen) {
+            calculateFuenfen(dices);
+            sbChoice.append(" hat die Fuenfen eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if (getSechsen() == -1 && checkSechsen(dices) >= 12 && !alreadyChosen) {
+            calculateSechsen(dices);
+            sbChoice.append(" hat die Sechsen eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
+        }
+        if(getChance() == -1 && getDiceValues(dices) > 15 && !alreadyChosen){
+            calculateChance(dices);
+            sbChoice.append(" hat die Chance eingetragen!");
+            Console.promptEnterKey();
+            alreadyChosen = true;
         }
         // TODO eintragung oder Streichung, falls keine Eingabe möglich
+        // Streichen falls keine Eintragung möglich
+
+
+
+        // TODO Ausgabe nach eintragung
+        Console.printGFX(FileEnums.LOGO);
+        Scoreboard.printScoreboard();
+        System.out.printf(getSpace() + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, getName());
+        dices.printDices(false);
+        System.out.println(sbChoice.toString());
+        
 
     }
 }
