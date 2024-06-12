@@ -153,6 +153,23 @@ public class Highscore {
         }
         // Sort Highscores by score
         Collections.sort(highscores, Comparator.comparing(Highscore::getScore).reversed());
+        // Remove duplicates from Highscores List:
+        // int[] marker = new int[highscores.size()];
+        // for( int i = 0; i < marker.length; i++) {
+        //     marker[i] = 0;
+        // }
+        // for(int i = 1; i < highscores.size(); i++) {
+        //     if(highscores.get(i).getScore() == highscores.get(i - 1).getScore() && highscores.get(i).getName().equals(highscores.get(i - 1).getName())) {
+        //         marker[i] = 1;
+        //         i++;
+        //     }
+        // }
+        // for(int i = 0; i < marker.length; i++) {
+        //     if(marker[i] == 1) {
+        //         highscores.remove(i);
+        //     }
+        // }
+
         // Overwrite current Highscores file with new top 10 Highscores
         try (BufferedWriter out = new BufferedWriter(new FileWriter(saveDirectory + saveFile))){
             highscoreLines = 10;
@@ -169,5 +186,7 @@ public class Highscore {
           } catch (IOException e) {
             System.out.println(Console.space + "Highscore konnte nicht angelegt werden.");
           }
+        // Clear Highscores list for next function call
+        highscores.clear();
     }
 }

@@ -8,6 +8,7 @@ public class ComputerEnemy extends Player {
     }
 
     public static String chooseComputerName(int playerNumber) {
+        // TODO Random names for Computer Enemies
         System.out.printf(Console.space + "Bitte den Namen von Computerspieler %d eingeben: ", playerNumber);
 
         String computerName = Console.getInput();
@@ -476,11 +477,6 @@ public class ComputerEnemy extends Player {
             sbChoice.append("hat die Sechsen gestrichen!");
             alreadyChosen = true;
         }
-
-
-
-
-        // TODO Ausgabe nach eintragung
         Console.printGFX(FileEnums.LOGO);
         Scoreboard.printScoreboard();
         System.out.printf(Console.space + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, getName());

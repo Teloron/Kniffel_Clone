@@ -28,7 +28,7 @@ public class Kniffel {
             }
             if(!Highscore.highscores.isEmpty()){
                 Highscore.highscores.clear();
-        }
+            }
             // Show MainMenu
             Console.clear();
             Console.printGFX(FileEnums.LOGO);

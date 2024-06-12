@@ -249,7 +249,7 @@ public class Game {
     }
     public void updateHighscore(){
         for(Player player : Player.players){
-            if((player instanceof ComputerEnemy) && player.getIsActive()){
+            if(!(player instanceof ComputerEnemy) && player.getIsActive()){
                 player.setHasNewHighscore(Highscore.checkIfPlayerHasHighscore(player));
             }
         }
