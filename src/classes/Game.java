@@ -14,6 +14,7 @@ public class Game {
     public boolean getPlayerAndComputerCount() {
         Console.clear();
         Console.printGFX(FileEnums.LOGO);
+        boolean validChoice = false;
         do {
             System.out.print(Console.space + "Bitte Anzahl der Mitspieler eingeben (1-4): ");
 
@@ -21,15 +22,34 @@ public class Game {
                 humanPlayers = Integer.parseInt(Console.getInput());
             } catch (NumberFormatException e) {
             }
-            if (humanPlayers < 1 || humanPlayers > 4) {
-                System.out.println(
-                        Console.space + "Ungültige Eingabe. Bitte eine Zahl zwischen 1 und 4 eingeben.");
+            if(humanPlayers == 0){
+                System.out.print(Console.space + "Runde ohne Menschlichen Spieler starten? (J/N)");
+                String answer;
+                do{
+                    answer = Console.getInput();
+                    if(answer.equalsIgnoreCase("J") || answer.equalsIgnoreCase("Y")){
+                        computerPlayers = 4;
+                        humanPlayers = 0;
+                        return true;
+                    }else{
+                        if(!answer.equalsIgnoreCase("N")){
+                            System.out.print(Console.space + "Ungültige Eingabe bitte (J) = Ja oder (N) = Nein eingeben ");
+                        }
+                    }
+                }while(!answer.equalsIgnoreCase("J") && !answer.equalsIgnoreCase("N") && !answer.equalsIgnoreCase("Y"));
+            }else{
+                if(humanPlayers > 0 && humanPlayers < 5){
+                    validChoice = true;
+                }else{
+                    System.out.println(
+                        Console.space + "Ungültige Eingabe. Bitte eine Zahl zwischen 0 und 4 eingeben.");
                 System.out.println();
+                }
             }
-        } while (humanPlayers < 1 || humanPlayers > 4);
+        } while (humanPlayers < 0 || humanPlayers > 4 || !validChoice);
 
         if(humanPlayers < 4){
-            System.out.print(Console.space + "Möchtest du mit Computergegner auf 4 Spieler auffüllen? (J/N) ");
+            System.out.print(Console.space + "Möchtest du mit Computergegnern auf 4 Spieler auffüllen? (J/N) ");
             String answer;
             do{
                 answer = Console.getInput();
@@ -69,7 +89,7 @@ public class Game {
             for (int i = 1; i < computerPlayers+1; i++){
                 Console.clear();
                 Console.printGFX(FileEnums.LOGO);
-                String name = ComputerEnemy.chooseComputerName(i) + " [COM]";
+                String name = ComputerEnemy.chooseComputerName(i) + " COM";
                 new ComputerEnemy(i+humanPlayers, name, true);
             }
         }else{
@@ -87,7 +107,6 @@ public class Game {
                 if(!player.getIsActive()){
                     continue;
                 }
-                
                 Console.clear();
                 Console.printGFX(FileEnums.LOGO);
                 if(player instanceof ComputerEnemy){
@@ -108,11 +127,11 @@ public class Game {
         String space = "                                 ";
         playerDices.rollAllDices();
         while (wurf < 4) {
-            Console.clear();
-            Console.printGFX(FileEnums.LOGO);
-            Scoreboard.printScoreboard();
             playerDices.sortDices();
             if(wurf < 3){
+                Console.clear();
+            Console.printGFX(FileEnums.LOGO);
+                Scoreboard.printScoreboard();
                 System.out.printf(Console.space + "Runde %d: %s ist dran mit dem %d. Wurf.\n"
                                                                                     ,(currentRound), player.getName(), wurf);
                 playerDices.printDices(true);
@@ -124,17 +143,13 @@ public class Game {
                 if(!rerolled){
                     wurf = 2;
                 }
-            }else{
-                                                              
+            }else{                                       
                 if (wurf < 2){
                     playerDices.printDices(true);
-                    
                 }else
                 {
-                    
                     playerDices.sortDices();                   
                     ((ComputerEnemy)player).computerScoreChoice(playerDices, currentRound);
-                    Console.promptEnterKey();
                     System.out.println(space + "         Die Runde von " + player.getName() + " ist beendet.");
                     System.out.println(space +"         " + player.getNextPlayer().getName() + " ist jetzt an der Reihe.");
                     Console.promptEnterKey();
@@ -234,10 +249,13 @@ public class Game {
     }
     public void updateHighscore(){
         for(Player player : Player.players){
-            if(player.getIsActive()){
+            if((player instanceof ComputerEnemy) && player.getIsActive()){
                 player.setHasNewHighscore(Highscore.checkIfPlayerHasHighscore(player));
             }
-            if(player.getHasNewHighscore() && player.getIsActive()){
+        }
+        for(Player player : Player.players){
+            if(player.getHasNewHighscore()){
+                Console.clear();
                 Console.printGFX(FileEnums.LOGO);
                 Console.printGFX(FileEnums.PODIUM_SMALL);
                 System.out.printf("%sHerlichen Glückwunsch %s!\n%s     Du hast einen Neuen Highscore erzielt!\n%s     Dein neuer Highscore beträgt %d Punkte!\n", Console.menuSpace, player.getName(), Console.space, Console.space, player.getEndsumme());

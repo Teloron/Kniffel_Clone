@@ -115,28 +115,31 @@ public class ComputerEnemy extends Player {
                 // System.out.println("Grosse Strasse wurde ausgelöst");
                 return false;
             } else {
-                if (checkKleineStrasse(dices)) {
-                    boolean[] dicesToKeep = { true, true, true, true, true };
-                    dices.setDicesToKeep(dicesToKeep);
-                    // System.out.println("Kleine Strasse wurde ausgelöst");
-                    return false;
-                } else {
+                // if (checkKleineStrasse(dices)) {
+                //     boolean[] dicesToKeep = { true, true, true, true, true };
+                //     dices.setDicesToKeep(dicesToKeep);
+                //     // System.out.println("Kleine Strasse wurde ausgelöst");
+                //     return false;
+                // } else {
                     if (checkBeinaheStrasse(dices)) {
                         // System.out.println("Beinahe Strasse wurde ausgelöst");
+                                                //  0      1      2      3      4
                         boolean[] dicesToKeep = { false, false, false, false, false };
-                        int[] diceVal = dices.getDices();
+
+                        int[] diceVal = dices.getDices(); // { 0, 1, 2, 3, 4, 5 }
+                        //                       0      1      2      3      4      5
                         boolean[] valTaken = { false, false, false, false, false, false };
                         int consecutive = 1;
                         boolean consecutiveBreak = false;
                         for (int i = 1; i < diceVal.length; i++) {
                             if (diceVal[i] == diceVal[i - 1] + 1 && !consecutiveBreak) {
-                                if(!valTaken[diceVal[i]]){
+                                if(!valTaken[diceVal[i]-1]){
                                     dicesToKeep[i] = true;
-                                    valTaken[diceVal[i]] = true;
+                                    valTaken[diceVal[i]-1] = true;
                                 }
-                                if(!valTaken[diceVal[i - 1]]){
+                                if(!valTaken[diceVal[i - 1] - 1]){
                                     dicesToKeep[i - 1] = true;
-                                    valTaken[diceVal[i - 1]] = true;
+                                    valTaken[diceVal[i - 1]-1] = true;
                                 }
                                 consecutive++;
                                 if (consecutive >= 3) {
@@ -156,13 +159,13 @@ public class ComputerEnemy extends Player {
                         }
                         for (int i = 2; i < diceVal.length; i++) {
                             if (diceVal[i] == diceVal[i - 1] + 1 && consecutiveBreak) {
-                                if(!valTaken[diceVal[i]]){
+                                if(!valTaken[diceVal[i] -1 ]){
                                     dicesToKeep[i] = true;
-                                    valTaken[diceVal[i]] = true;
+                                    valTaken[diceVal[i] - 1] = true;
                                 }
-                                if(!valTaken[diceVal[i - 1]]){
+                                if(!valTaken[diceVal[i - 1] - 1]){
                                     dicesToKeep[i - 1] = true;
-                                    valTaken[diceVal[i - 1]] = true;
+                                    valTaken[diceVal[i - 1] - 1] = true;
                                 }
 
                                 consecutive++;
@@ -170,7 +173,7 @@ public class ComputerEnemy extends Player {
                         }
                         dices.setDicesToKeep(dicesToKeep);
                         return true;
-                    }
+                    //}
                 }
 
             }
@@ -295,32 +298,28 @@ public class ComputerEnemy extends Player {
 
     public void computerScoreChoice(Dices dices, int round) {
         boolean alreadyChosen = false;       
-        StringBuilder sbChoice = new StringBuilder(getSpace() + "           " + getName());
+        StringBuilder sbChoice = new StringBuilder(getSpace() + "           " + getName() + " ");
 
         // Eintragung ins Scoreboard nach Relevanz
         // Zuerst die versuchen den Unteren Teil des Scorebocks abzuschließen
         if (getKniffel() == -1 && checkKniffel(dices) && !alreadyChosen) {
             setKniffel(50);
-            sbChoice.append(" hat den Kniffel eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat den Kniffel eingetragen!");
             alreadyChosen = true;
         }
         if (getFullHouse() == -1 && checkFullHouse(dices) && !alreadyChosen) {
             setFullHouse(25);
-            sbChoice.append(" hat das Full House eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat das Full House eingetragen!");
             alreadyChosen = true;
         }
         if (getGrosseStrasse() == -1 && checkGrosseStrasse(dices) && !alreadyChosen) {
             setGrosseStrasse(40);
-            sbChoice.append(" hat die große Straße eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die große Straße eingetragen!");
             alreadyChosen = true;
         }
         if (getKleineStrasse() == -1 && checkKleineStrasse(dices) && !alreadyChosen) {
             setKleineStrasse(30);
-            sbChoice.append(" hat die kleine Straße eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die kleine Straße eingetragen!");
             alreadyChosen = true;
         }
         if (getViererpasch() == -1 && checkViererpasch(dices) && !alreadyChosen) {
@@ -330,8 +329,7 @@ public class ComputerEnemy extends Player {
                 viererpasch += dice;
             }
             setViererpasch(viererpasch);
-            sbChoice.append(" hat den Viererpasch eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat den Viererpasch eingetragen!");
             alreadyChosen = true;
         }
         if (getDreierpasch() == -1 && checkDreierpasch(dices) && !alreadyChosen) {
@@ -341,103 +339,151 @@ public class ComputerEnemy extends Player {
                 dreierpasch += dice;
             }
             setDreierpasch(dreierpasch);
-            sbChoice.append(" hat den Dreierpasch eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat den Dreierpasch eingetragen!");
             alreadyChosen = true;
         }
 
         // High value Rolls (mindestens 4 gleiche Würfel) bevorzugen!!
         if (getSechsen() == -1 && checkSechsen(dices) > 18 && !alreadyChosen) {
             calculateSechsen(dices);
-            sbChoice.append(" hat die Sechsen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Sechsen eingetragen!");
             alreadyChosen = true;
         }
         if (getFuenfen() == -1 && checkFuenfen(dices) > 15 && !alreadyChosen) {
             calculateFuenfen(dices);
-            sbChoice.append(" hat die Fünfen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Fünfen eingetragen!");
             alreadyChosen = true;
         }
         if (getVieren() == -1 && checkVieren(dices) > 12 && !alreadyChosen) {
             calculateVieren(dices);
-            sbChoice.append(" hat die Vieren eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Vieren eingetragen!");
             alreadyChosen = true;
         }
         if (getDreien() == -1 && checkDreien(dices) > 9 && !alreadyChosen) {
             calculateDreien(dices);
-            sbChoice.append(" hat die Dreien eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Dreien eingetragen!");
             alreadyChosen = true;
         }
         if (getZweien() == -1 && checkZweien(dices) > 6 && !alreadyChosen) {
             calculateZweien(dices);
-            sbChoice.append(" hat die Zweien eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Zweien eingetragen!");
             alreadyChosen = true;
         }
         if (getEinsen() == -1 && checkEinsen(dices) > 3 && !alreadyChosen) {
             calculateEinsen(dices);
-            sbChoice.append(" hat die Einsen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Einsen eingetragen!");
             alreadyChosen = true;
         }
 
         
 
         // Low Value Rolls als Notlösung
-        if (getEinsen() == -1 && checkEinsen(dices) >= 2 && !alreadyChosen) {
+        if (getEinsen() == -1 && checkEinsen(dices) >= 1 && !alreadyChosen) {
             calculateEinsen(dices);
-            sbChoice.append(" hat die Einsen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Einsen eingetragen!");
             alreadyChosen = true;
         }
-        if (getZweien() == -1 && checkZweien(dices) >= 4 && !alreadyChosen) {
+        if (getZweien() == -1 && checkZweien(dices) >= 2 && !alreadyChosen) {
             calculateZweien(dices);
-            sbChoice.append(" hat die Zweien eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Zweien eingetragen!");
             alreadyChosen = true;
         }
-        if (getDreien() == -1 && checkDreien(dices) >= 6 && !alreadyChosen) {
+        if (getDreien() == -1 && checkDreien(dices) >= 3 && !alreadyChosen) {
             calculateDreien(dices);
-            sbChoice.append(" hat die Dreien eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Dreien eingetragen!");
             alreadyChosen = true;
         }
         if (getVieren() == -1 && checkVieren(dices) >= 8 && !alreadyChosen) {
             calculateVieren(dices);
-            sbChoice.append(" hat die Vieren eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Vieren eingetragen!");
             alreadyChosen = true;
         }
         if (getFuenfen() == -1 && checkFuenfen(dices) >= 10 && !alreadyChosen) {
             calculateFuenfen(dices);
-            sbChoice.append(" hat die Fuenfen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Fuenfen eingetragen!");
             alreadyChosen = true;
         }
         if (getSechsen() == -1 && checkSechsen(dices) >= 12 && !alreadyChosen) {
             calculateSechsen(dices);
-            sbChoice.append(" hat die Sechsen eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Sechsen eingetragen!");
             alreadyChosen = true;
         }
         if(getChance() == -1 && getDiceValues(dices) > 15 && !alreadyChosen){
             calculateChance(dices);
-            sbChoice.append(" hat die Chance eingetragen!");
-            Console.promptEnterKey();
+            sbChoice.append("hat die Chance eingetragen!");
             alreadyChosen = true;
         }
-        // TODO eintragung oder Streichung, falls keine Eingabe möglich
+
+
         // Streichen falls keine Eintragung möglich
+        if(getKniffel() == -1 && !alreadyChosen){
+            setKniffel(0);
+            sbChoice.append("hat den Kniffel gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getGrosseStrasse() == -1 && !alreadyChosen){
+            setGrosseStrasse(0);
+            sbChoice.append("hat die große Straße gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getFullHouse() == -1 && !alreadyChosen){
+            setFullHouse(0);
+            sbChoice.append("hat das Full House gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getKleineStrasse() == -1 && !alreadyChosen){
+            setKleineStrasse(0);
+            sbChoice.append("hat die kleine Straße gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getViererpasch() == -1 && !alreadyChosen){
+            setViererpasch(0);
+            sbChoice.append("hat den Viererpasch gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getDreierpasch() == -1 && !alreadyChosen){
+            setDreierpasch(0);
+            sbChoice.append("hat den Dreierpasch gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getEinsen() == -1 && !alreadyChosen){
+            setEinsen(0);
+            sbChoice.append("hat die Einsen gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getZweien() == -1 && !alreadyChosen){
+            setZweien(0);
+            sbChoice.append("hat die Zweien gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getDreien() == -1 && !alreadyChosen){
+            setDreien(0);
+            sbChoice.append("hat die Dreien gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getVieren() == -1 && !alreadyChosen){
+            setVieren(0);
+            sbChoice.append("hat die Vieren gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getFuenfen() == -1 && !alreadyChosen){
+            setFuenfen(0);
+            sbChoice.append("hat die Fuenfen gestrichen!");
+            alreadyChosen = true;
+        }
+        if(getSechsen() == -1 && !alreadyChosen){
+            setSechsen(0);
+            sbChoice.append("hat die Sechsen gestrichen!");
+            alreadyChosen = true;
+        }
+
 
 
 
         // TODO Ausgabe nach eintragung
         Console.printGFX(FileEnums.LOGO);
         Scoreboard.printScoreboard();
-        System.out.printf(getSpace() + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, getName());
+        System.out.printf(Console.space + "Runde %d: Ergebnis nach dem letzten Wurf von %s.\n", round, getName());
         dices.printDices(false);
         System.out.println(sbChoice.toString());
         

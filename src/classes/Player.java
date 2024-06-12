@@ -527,16 +527,11 @@ public class Player {
     public int checkEinsen(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
-            if (dices.getDice(i) == 5) {
+            if (dices.getDice(i) == 1) {
                 counter++;
             } 
         }
-        if (counter > 0){
-            einsen = counter * 1;
-            return einsen;
-        }else{
-            return 0;
-        }
+        return counter;
     }
 
     public boolean calculateZweien(Dices dices) {
@@ -557,16 +552,11 @@ public class Player {
     public int checkZweien(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
-            if (dices.getDice(i) == 5) {
+            if (dices.getDice(i) == 2) {
                 counter++;
             } 
         }
-        if (counter > 0){
-            zweien = counter * 2;
-            return zweien;
-        }else{
-            return 0;
-        }
+        return counter * 2;
     }
 
     public boolean calculateDreien(Dices dices) {
@@ -586,16 +576,11 @@ public class Player {
     public int checkDreien(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
-            if (dices.getDice(i) == 5) {
+            if (dices.getDice(i) == 3) {
                 counter++;
             } 
         }
-        if (counter > 0){
-            dreien = counter * 3;
-            return dreien;
-        }else{
-            return 0;
-        }
+        return counter * 3;
     }
 
     public boolean calculateVieren(Dices dices) {
@@ -615,16 +600,11 @@ public class Player {
     public int checkVieren(Dices dices) {
         int counter = 0;
         for (int i = 1; i < 6; i++) {
-            if (dices.getDice(i) == 5) {
+            if (dices.getDice(i) == 4) {
                 counter++;
             } 
         }
-        if (counter > 0){
-            vieren = counter * 4;
-            return vieren;
-        }else{
-            return 0;
-        }
+        return counter * 4;
     }
 
     public boolean calculateFuenfen(Dices dices) {
@@ -649,12 +629,7 @@ public class Player {
                 counter++;
             } 
         }
-        if (counter > 0){
-            fuenfen = counter * 5;
-            return fuenfen;
-        }else{
-            return 0;
-        }
+        return counter * 5;
     }
 
     public boolean calculateSechsen(Dices dices) {
@@ -678,12 +653,7 @@ public class Player {
                 counter++;
             }
         }
-        if (counter > 0){
-            sechsen = counter * 6;
-            return sechsen;
-        }else{
-            return 0;
-        }
+        return counter * 6;
     }
 
     // Methods to calculate special dice rolls
