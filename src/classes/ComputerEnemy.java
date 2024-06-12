@@ -19,7 +19,7 @@ public class ComputerEnemy extends Player {
         // }
         // }
         if (computerName.length() == 0) {
-            computerName = choosePlayerName(playerNumber);
+            computerName = choosePlayerName(playerNumber) + " [COM]";
         }
         return computerName;
     }

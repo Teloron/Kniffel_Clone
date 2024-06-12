@@ -89,7 +89,7 @@ public class Game {
             for (int i = 1; i < computerPlayers+1; i++){
                 Console.clear();
                 Console.printGFX(FileEnums.LOGO);
-                String name = ComputerEnemy.chooseComputerName(i) + " COM";
+                String name = ComputerEnemy.chooseComputerName(i);
                 new ComputerEnemy(i+humanPlayers, name, true);
             }
         }else{
