@@ -1,6 +1,11 @@
 package classes;
 
+import java.util.Random;
+
 public class ComputerEnemy extends Player {
+
+    static String[] names = { "Lilith", "Andariel", "Hannah", "Aloy", "Hans", "Guenther", "Barbara", "Ellie", "Werner", "Sigrun", "Brynhild", "Kratos", "Joel", "Astro Bot", "Senua", "Lara", "Lagertha" };
+    
 
     public ComputerEnemy(int playerNumber, String name, boolean isActive) {
         super(playerNumber, name, isActive);
@@ -9,19 +14,21 @@ public class ComputerEnemy extends Player {
 
     public static String chooseComputerName(int playerNumber) {
         // TODO Random names for Computer Enemies
-        System.out.printf(Console.space + "Bitte den Namen von Computerspieler %d eingeben: ", playerNumber);
-
-        String computerName = Console.getInput();
+        //System.out.printf(Console.space + "Bitte den Namen von Computerspieler %d eingeben: ", playerNumber);
+        Random rand = new Random();
+        rand.nextInt();
+        String computerName = names[rand.nextInt(names.length)];
         // for(String c : playerName.split("")) {
         // if(c.equals('Ä') || c.equals('ä') || c.equals('Ö') || c.equals('ö') ||
         // c.equals('Ü') || c.equals('ü') || c.equals('ß')) {
         // playerName = choosePlayerName(playerNumber);
         // }
         // }
+        
         if (computerName.length() == 0) {
-            computerName = choosePlayerName(playerNumber) + " [COM]";
+            computerName = choosePlayerName(playerNumber);
         }
-        return computerName;
+        return computerName + " [COM]";
     }
 
     public boolean[] keepDices(Dices dices, int diceValue) {
